@@ -1,0 +1,167 @@
+.ncContainer {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    width: 320px;
+    height: 70%;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid gray;
+    overflow-y: scroll;
+    z-index: 1;
+}
+
+/* 調整滾輪樣式 */
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+.overlay {
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* icon */
+#ncBtn {
+    border: 2px solid white;
+    width: 28px;
+    height: 28px;
+    background-color: #0069B4;
+    position: relative;
+}
+
+.iconNcircle {
+    font-size: 13px;
+    position: absolute;
+    left: 19px;
+    top: -5px;
+    z-index: 1;
+    color: #ff0000;
+}
+
+
+/* 內容 */
+.NCplaceCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+.NCtopBgc {
+    background-color: #0069B4;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    left: 0;
+}
+
+.NCtopBgc i {
+    color: white;
+    margin-left: 25px;
+}
+
+.NCtopWord {
+    font-size: 18px;
+    display: flex;
+    margin: auto;
+    justify-content: centecontainerr;
+    color: white;
+}
+
+.NCcard {
+    width: 80%;
+    height: 100%;
+    box-shadow: 0px 2px 5px 0px rgba(216, 215, 215, 0.4);
+}
+
+.NCcardTitle {
+    font-size: 15px;
+    margin-top: 8px;
+}
+
+.NCcardText {
+    font-size: 14px;
+    position: relative;
+    margin: 5px 0 5px 0;
+}
+
+.NCcardMoney {
+    position: absolute;
+    right: 0;
+    font-size: 15px;
+}
+
+.NCcardDate {
+    font-size: 12px;
+    color: #2c2c2c;
+}
+
+.NCcardT {
+    font-size: 10px;
+    color: #2c2c2c;
+    margin: 5px 0;
+}
+
+.button-container {
+    display: inline-block;
+    width: 100%;
+    margin-top: 5px;
+    margin-left: 5px;
+    /* overflow-x: auto; 超出寬度時顯示水平滾動條 */
+    /* -webkit-overflow-scrolling: touch; 支援滑動操作 */
+    /* overflow-y: scroll; */
+}
+
+
+.button-wrapper {
+    display: flex;
+    max-width: fit-content;
+    /* 使內容寬度適應按鈕寬度總和 */
+    /* align-items: center; */
+    /* 垂直居中對齊按鈕 */
+    /* line-height: 1; */
+}
+
+.button-container button {
+    white-space: nowrap;
+    /* 防止按鈕換行 */
+}
+
+.Classification {
+    border-radius: 35%;
+    background-color: white;
+    color: #0069B4;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.Classification:hover {
+    background-color: #d8d7d7;
+    padding: 5px;
+}
+
+.ncData_off {
+    display: none;
+}
+
+.ncCount {
+    margin-top: 50%;
+    font-size: 50px;
+    color: rgba(0, 105, 180, 0.5);
+}
+
+.ncCount b {
+    font-size: 30px;
+
+}

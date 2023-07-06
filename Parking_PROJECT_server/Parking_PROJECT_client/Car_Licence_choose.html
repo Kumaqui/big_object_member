@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>選擇刪除車牌號碼</title>
+    <!-- bootstrap5-->
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        button {
+            border: none;
+            background-color: transparent;
+        }
+
+        .back_btn {
+            color: white;
+            text-align: center;
+            font-size: 40px;
+            position: fixed;
+            margin-left: 0%;
+        }
+
+        img {
+            width: 300px;
+        }
+        .bg_blue {
+            background-color: #0069B4;
+        }
+        .color_white{
+            color: white;
+        }
+        .border_none{
+            border: none;
+            background-color: transparent;
+        }
+        .btn_i {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+        .dis_flex_row_j_center{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg_blue">
+        <div style="position: absolute; left:5px">
+            <button class="border_none color_white btn_i Gold_flow_home_page">
+                x
+            </button>
+        </div>
+        <div class=" dis_flex_row_j_center pt-1">
+            <h2 class="color_white">
+                <b>選擇刪除車牌號碼</b>
+            </h2>
+        </div>
+    </div>
+    <div style="background-color: white;">
+        <div class="container" style="padding-top: 20px;">
+            <div class="row" style="justify-content: center;">
+                <div class="col-12" style="text-align:center">
+                    <h4>
+                        請選擇刪除車牌號碼
+                    </h4>
+                    <hr>
+                </div>
+            </div>
+            <div class="row" id="license_data"></div>
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+    <script>
+        var member_ac =  localStorage.getItem("member_ac")  
+        if(!member_ac){
+            window.location = "./login.html"
+        }
+    </script>
+    <script>
+        var id = localStorage.getItem("memberID")
+        console.log(id)
+        $(".Gold_flow_home_page").on("click", function () {
+            window.location = "./Gold_flow_home.html"
+        })
+        function refreshData() {
+            $('#license_data').empty()
+            $.ajax({
+                url: `http://localhost:3000/select/license/${id}`,
+                type: "GET"
+            }).done(function (x) {
+                var datafromS = JSON.parse(x);
+                // console.log(datafromS)
+                for (i = 0; i < datafromS.length; i++) {
+                    $('#license_data').append(
+                        `<div class="col-12" style="display: flex; align-items: center;justify-content: center;">
+                        <div 
+                            style="background-image: url('./assets/image/license/pay-01.png'); width: 150px; height: 70px;background-size:150px 70px; text-align: center; vertical-align: bottom; margin-top: 5px;">
+                            <button style="margin-top: 25px; font-size: 24px;" onclick="confirmdelete('${datafromS[i].license}')">${datafromS[i].license}</button>
+                        </div>
+                </div>
+                `
+                    )
+                }
+            })
+        }
+        refreshData()
+
+        function confirmdelete(x) {
+            var result = confirm('確定刪除')
+            console.log(result)
+            if (result) {
+                deletelicense(x)
+                refreshData()
+            }
+        }
+        function deletelicense(x) {
+            console.log(x)
+            $.ajax({
+                url: `http://localhost:3000/delete/license`,
+                type: "post",
+                data: {
+                    license: x
+                }
+            }).done(function () {
+                // window.location = "./Car_Licence_choose.html"
+            })
+        }
+
+
+    </script>
+</body>
+
+</html>

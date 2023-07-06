@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儲值</title>
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="./assets/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+
+
+    <style>
+        #bank {
+            width: 100%;
+            border: none;
+            height: 50px;
+            font-size: 30px;
+            /* overflow: hidden; */
+
+        }
+
+        #input {
+            border: none;
+            font-size: 24px;
+        }
+
+        #input:focus {
+            outline: none;
+
+        }
+
+        #input::-webkit-outer-spin-button,
+        #input::-webkit-inner-spin-button {
+            appearance: none;
+        }
+
+        .e05 {
+            visibility: hidden;
+
+        }
+
+        table tr td {
+            font-size: 24px;
+            color: rgb(150, 150, 150);
+            padding: 50px;
+            border-bottom: 1px rgba(200, 200, 200, 0.444) solid;
+            /* width: 1%; */
+        }
+
+        table {
+
+            width: 100%;
+            height: 300px;
+
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+
+        .color_gary {
+            color: rgb(126, 123, 123)
+        }
+
+        .border_gray {
+            border: 1px rgb(126, 123, 123)solid;
+        }
+
+        .dis_flex_column_center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_row {
+            display: flex;
+            flex-direction: row;
+        }
+        .dis_flex_row_j_center {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .border_none {
+            border: none;
+            background-color: transparent;
+        }
+
+        .body_color {
+            background-size: cover;
+            background-color: rgba(206, 206, 206, 0.302)
+        }
+
+        .btn-gray {
+            width: 100%;
+            background-color: rgba(128, 128, 128, 0.241);
+            border-radius: 10px;
+            color: #0069B4;
+            border-color: white;
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        .btn_blue {
+
+            width: 100%;
+            border: none;
+            background-color: rgb(0, 106, 181);
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            padding: 3px;
+            text-shadow: -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144);
+            box-shadow: 0px 15px 0px 0px rgb(1, 84, 144);
+            transition: all .4s;
+        }
+
+
+        .btn_blue:hover {
+
+            background-color: rgb(0, 135, 231)
+        }
+
+
+
+        .btn_blue:active {
+            transform: translate(0, 5px);
+            box-shadow: 0px 1px 0px 0px rgb(0, 81, 139);
+        }
+
+        .btn_i {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .bg_blue {
+            background-color: #0069B4;
+        }
+
+        .bg_white {
+            background-color: white;
+        }
+
+        .color_white {
+            color: white;
+        }
+
+        .color_blue {
+            color: #0069B4
+        }
+    </style>
+
+</head>
+
+<body class="body_color">
+    <!-- 導覽列 -->
+    <div class="bg_blue">
+        <div style="position: absolute; left:5px">
+            <button class="border_none color_white btn_i Gold_flow_home_page">
+                x
+            </button>
+        </div>
+        <div class=" dis_flex_row_j_center pt-1">
+            <h2 class="color_white">    
+                <b>輸入儲值金額</b>
+            </h2>
+        </div>
+    </div>
+
+    <div class="bg_white" style="padding-top: 20px;">
+        <div class="container">
+            <!-- 轉帳帳戶 -->
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="color_gary">
+                        轉帳帳戶
+                    </h4>
+                </div>
+                <div class="col-12">
+                    <select id="bank" name="bank" style="font-size: 18px;">
+                        <option value="">中華郵政帳戶</option>
+                        <option value="">中國信託帳戶</option>
+                        <option value="">玉山銀行帳戶</option>
+                    </select>
+                </div>
+            </div>
+            <hr>
+            <!-- 輸入儲值金額 -->
+            <div>
+                <div style="display: inline-block;">
+                    <h4 class="color_gary">請輸入儲值金額</h4>
+                </div>
+                <div style="display: inline-block;">
+                    <h5 class="color_gary"> (金額不得超過五萬元)</h5>
+                </div>
+            </div>
+            <!-- 儲值金額輸入框 -->
+            <div class="row ms-4">
+                <div class="col-11 ">
+                    <input value="" required placeholder="0" style="width: 100%;" id="input" type="number"
+                        ondrop="return false;" onpaste="return false;" />
+                </div>
+                <div class=" col-1">
+                    <button id="mydelete" style="margin-top: 15px;" class="e05 border_none">
+                        x
+                    </button>
+                </div>
+                <div style=" width: 20px; position: relative;top:-30px; left: -20px;" >
+                    <h4>$</h4>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+
+    <br>
+    <div class="container">
+        <button id="a01" class="btn_blue" type="submit" value="Submit">
+            <b>下一步</b> </button>
+    </div>
+
+    <script>
+        var member_ac = localStorage.getItem("member_ac")
+        if (!member_ac) {
+            window.location = "./login.html"
+        }
+    </script>
+
+    <script>
+        // console.log($)
+        var input = document.getElementById('input');
+        input.addEventListener('input', function (e) {
+            // console.log(e.data);
+
+            if (e.data) {
+                $('#mydelete').removeClass('e05')
+            } else {
+                $('#mydelete').addClass('e05')
+            }
+        })
+        $('#mydelete').on('click', function () {
+            document.getElementById("input").value = "";
+        })
+
+        $(".Gold_flow_home_page").on("click", function () {
+            window.location = "./Gold_flow_home.html"
+        })
+
+        a01.onclick = function () {
+            var y = $("#input")
+            // console.log(y[0].valueAsNumber)
+            var option = $("#bank option:selected")
+            // console.log(option.text())
+            // sessionStorage.setItem 儲存資料
+            sessionStorage.setItem("stored", `${y[0].valueAsNumber}`)
+            sessionStorage.setItem("bank", `${option.text()}`)
+            window.location = "./stored_sure.html"
+        }
+
+    </script>
+
+</body>
+
+</html>

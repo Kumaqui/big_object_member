@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>線上錢包</title>
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="./assets/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="./assets/css/BANK_ACCOUNT.css">
+    <style>
+        /* .animate_hover{
+        animate__animated animate__rubberBand
+    } */
+        button {
+            border: none;
+            background-color: transparent;
+        }
+
+        .modal_none {
+            display: none;
+        }
+
+        .modal_block {
+            display: block;
+        }
+
+        .data_modal {
+            position: fixed;
+            bottom: 0;
+            left: 0%;
+            right: 0%;
+            width: 100%;
+            background-color: white;
+            z-index: 1000;
+            border-radius: 40px 40px;
+        }
+
+
+        .back_btn {
+            color: white;
+            text-align: center;
+            font-size: 40px;
+            position: fixed;
+            margin-left: 0%;
+        }
+
+        input[type=date] {
+            width: 150px;
+        }
+
+        .close {
+            font-size: 40px;
+            position: fixed;
+            margin-left: 0%;
+        }
+
+        .loc_btn {
+            background-color: rgba(206, 206, 206, 0.302);
+        }
+
+        .checked_btn {
+            background-color: #0069B4;
+            color: white;
+        }
+
+        .mask_gray {
+            z-index: 99;
+            background-color: rgba(206, 206, 206, 0.302);
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            opacity: 1;
+        }
+
+        .mask_on {
+            display: block;
+        }
+
+        .mask_off {
+            display: none;
+        }
+
+        .Data_off {
+            display: none;
+        }
+
+        .modal-content .container div+button {
+            background-color: #0069B4;
+            color: white;
+            width: 100%;
+            line-height: 80px;
+            border-radius: 20px;
+        }
+
+        .form_btn .col-4 {
+            text-align: center;
+            padding-bottom: 5px;
+        }
+
+        .form_btn .col-4 button {
+            width: 90%;
+            border-radius: 15px;
+        }
+
+        #stored:hover {
+            transform: scale(1.2)
+        }
+
+        #stored:active {
+            transform: scale(1.03)
+        }
+
+        #Withdrawal:hover {
+            transform: scale(1.2)
+        }
+
+        #Withdrawal:active {
+            transform: scale(1.03)
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+
+        .color_gary {
+            color: rgb(126, 123, 123)
+        }
+
+        .border_gray {
+            border: 1px  rgb(126, 123, 123) solid;
+        }
+
+        .dis_flex_column_center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_row_j_center {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .border_none {
+            border: none;
+            background-color: transparent;
+        }
+
+        .body_color {
+            background-size: cover;
+            background-color: rgba(206, 206, 206, 0.302)
+        }
+
+        .btn-gray {
+            width: 100%;
+            background-color: rgba(128, 128, 128, 0.241);
+            border-radius: 10px;
+            color: #0069B4;
+            border-color: white;
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        .btn_blue {
+            width: 100%;
+            background-color: #0069B4;
+            border-radius: 10px;
+            color: white;
+            border-color: white;
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        .btn_i {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .bg_blue {
+            background-color: #0069B4;
+        }
+
+        .bg_white {
+            background-color: white;
+        }
+
+        .color_white {
+            color: white;
+        }
+
+        .color_blue {
+            color: #0069B4
+        }
+    </style>
+
+</head>
+
+<body class="body_color">
+    <!-- 導覽列 -->
+    <div style="position: absolute; left:5px">
+        <button class=" border_none btn_i G_F_H">
+            <i class="fa fa-angle-left"></i>
+        </button>
+    </div>
+    <div class="bg_blue dis_flex_row_j_center pt-1">
+        <h2 class="color_white  ">
+            <b>帳戶</b>
+        </h2>
+    </div>
+    <div class="bg_white">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mt-3 dis_flex_center">
+                    <h3 class="ac"><b></b> </h3>
+                </div>
+                <div class="dis_flex_center pt-2" >
+                    <div>
+                        <h2 class="money me-1"> <b> </b></h2>
+                    </div>
+                    <div >
+                        <h3 ><b>元</b> </h3>
+                    </div>
+                </div>
+            </div>
+            <hr class="color_gary" style="margin-top: -3px;">
+            <div class="row">   
+                <div class="col-6 ">
+                    <div class="row ">
+                        <div class="col-12 ">    
+                            <button class="border_none stored" style="float: right;" >
+                                <img id="stored" style="width:30px;" src="./assets/image/Gold_Flow_image/pay-06123.png"
+                                    alt="">
+                            </button>   
+
+                        </div>
+                        <div class="col-12 mt-2" style="padding-right: 17px;">
+                            <h4 style="float: right;"> 儲值</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-6 ps-4">
+                    <div class="row" style="float: left;">
+                        <div class="col-12">
+                            <button class="border_none withdrawal">
+                                <img id="Withdrawal" style="width:30px;"
+                                    src="./assets/image/Gold_Flow_image/pay-07456.png" alt="">
+                            </button>
+
+                        </div>
+                        <div class="col-12 mt-2 " style="padding-left: 17px;">
+                            <h4 >提領</h4>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="bg_white ">
+        <div id="traderecord_data" class="container pt-4">
+
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+        var member_ac = localStorage.getItem("member_ac")
+        if (!member_ac) {
+            window.location = "./login.html"
+        }
+    </script>
+    <script>
+        // 返回金流主頁
+        $(".G_F_H").on("click", function () {
+            window.location = "./Gold_flow_home.html"
+        })
+        var id = localStorage.getItem("memberID")
+        console.log(id)
+        // 會員帳號 金額 資料庫select
+        $.ajax({
+            url: "http://localhost:3000/select/member",
+            type: "post",
+            data: { id }
+        }).done(
+            function (e) {
+                var dataServer = JSON.parse(e);
+                // console.log(dataServer)
+                // console.log(dataServer[0].member_ac)
+                $(".ac").append(`會員帳號  ${dataServer[0].member_ac}`).css("font-weight", "bold")
+                $(".money").append(dataServer[0].member_money).css("font-weight", "bold")
+
+            }
+        )
+        // 跳轉至儲值頁面
+        $(".stored").on("click", function () {
+            window.location = "./stored_value.html"
+        })
+        $(".withdrawal").on("click", function () {
+            window.location = "./Withdrawal_value.html"
+        })
+
+        function refreshData() {
+            $('#traderecord_data').empty()
+            $.ajax({
+                url: `http://localhost:3000/select/traderecord/${id}`,
+                type: "GET"
+            }).done(function (x) {
+                var traderecord = JSON.parse(x)
+                // console.log(traderecord)
+                for (i = 0; i < traderecord.length; i++) {
+                    var type
+                    switch (traderecord[i].tr_type) {
+                        case 0: type = '儲值'; break;
+                        case 1: type = '提領'; break;
+                        case 2: type = '繳費'; break;
+                    }
+                    $('#traderecord_data').append(`
+                        <div class="col-12 row traderecord_data" datadate="${traderecord[i].tr_date}" datatype="${traderecord[i].tr_type}">
+                            <div class="col-9" style="text-align: left;">
+                                <h4>${traderecord[i].tr_counterparty}</h4>
+                                <h5 class="color_blue">Carparking${type}</h5>
+                                <h6 style="color: gray">${traderecord[i].tr_date} ${traderecord[i].tr_time}</h6>
+                            </div>
+                            <div class="col-3" style="text-align: right;">
+                                <h2>${traderecord[i].tr_amount}元</h2>
+                            </div>                            
+                            <hr>
+                        </div>
+                    `)
+                }
+            })
+            return true
+        }
+
+        refreshData()
+
+
+        $(".back_btn").on("click", function () {
+            window.location = "./Gold_flow_home.html"
+        })
+
+    </script>
+
+    </div>
+    </div>
+
+</body>
+
+</html>

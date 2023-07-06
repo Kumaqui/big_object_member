@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儲值成功</title>
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="./assets/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+
+        .color_gary {
+            color: rgb(126, 123, 123)
+        }
+
+        .border_gray {
+            border: 1px rgb(126, 123, 123) solid;
+        }
+
+        .dis_flex_column_center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .border_none {
+            border: none;
+            background-color: transparent;
+        }
+
+        .body_color {
+            background-size: cover;
+            background-color: rgba(206, 206, 206, 0.302)
+        }
+
+        .btn-gray {
+            width: 100%;
+            background-color: rgba(128, 128, 128, 0.241);
+            border-radius: 10px;
+            color: #0069B4;
+            border-color: white;
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        .btn_blue:hover {
+
+            background-color: rgb(0, 135, 231)
+        }
+
+
+        .bg_blue {
+            background-color: #0069B4;
+        }
+
+        .btn_blue:active {
+            transform: translate(0, 5px);
+            box-shadow: 0px 1px 0px 0px rgb(0, 81, 139);
+        }
+
+        .btn_blue {
+            width: 100%;
+            border: none;
+            background-color: rgb(0, 106, 181);
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            padding: 3px;
+            text-shadow: -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144);
+            box-shadow: 0px 15px 0px 0px rgb(1, 84, 144);
+            transition: all .4s;
+        }
+
+        .color_white {
+            color: white;
+        }
+
+        .dis_flex_row_j_center {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .btn_i {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body class="body_color">
+
+    <!-- 導覽列 -->
+    <div class="bg_blue">
+        <div style="position: absolute; left:5px" >
+            <button class="border_none color_white btn_i Gold_flow_home_page">
+                x
+            </button>
+        </div>
+        <div class=" dis_flex_row_j_center pt-1" >
+            <h2 class="color_white">
+                <b>儲值結果</b>
+            </h2>
+        </div>
+    </div>
+
+    <div class="dis_flex_column_center pt-5 " style=" background-color: white;">
+        <img class="animate__animated animate__bounce animate__repeat-2 " style="width: 100px;"
+            src="./assets/image/Gold_Flow_image/pay-10suc.png" alt="">
+        <br>
+        <div style="margin-top: 10px;">
+            <h3 class="animate__animated animate__fadeInDown" style="color: rgb(49, 225, 5);"><b>儲值成功</b> </h3>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <h4 class="color_gary">儲值金額</h4>
+        </div>
+        <div class="dis_flex_row">
+            <div>
+                <h1 style=" position: relative; top:10px; " class="stored"><b> </b></h1>
+            </div>
+
+        </div>
+        <div style="margin-top: 20px;">
+            <h4 class="color_gary time">
+
+            </h4>
+
+        </div>
+
+    </div>
+
+    <div style="margin-top: 50px;" class="container">
+        <div class="row ">
+            <div class="col-8">
+                <h4 class="color_gary mt-1">目前Car Parking帳戶餘額</h4>
+            </div>
+            <div class="col-4">
+                <h2 class="color_gary member_money"></h2>
+            </div>
+        </div>
+        <hr class="color_gary">
+    </div>
+    <div class="dis_flex_column_center">
+        <h4 class="color_gary">可至交易紀錄查看儲值明細</h4>
+    </div>
+    </div>
+
+    <div class="dis_flex_column_center" style="height: 18vh;">
+        <div class="container">
+            <button class="btn_blue stored_tr" type="submit" value="Submit">
+                <b>確定儲值</b> </button>
+
+
+            <div style="margin-top: 20px;" class="dis_flex_column_center">
+                <h6 class="color_gary">此付款流程由Car Parking提供</h6>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        var bank = sessionStorage.getItem("bank");
+        var stored = sessionStorage.getItem("stored");
+        var date = new Date();
+        var tm = date.getMonth() + 1;
+        var td = date.getDate();
+        var th = date.getHours();
+        var tmin = date.getMinutes();
+        var ts = date.getSeconds();
+
+        th = th < 10 ? "0" + th : th;
+        tmin = tmin < 10 ? "0" + tmin : tmin;
+        ts = ts < 10 ? "0" + ts : ts;
+        td = td < 10 ? "0" + td : td;
+        if (tm.toString.length == 1) {
+            tm = "0" + tm;
+        }
+        var id = localStorage.getItem("memberID")
+        // console.log(id)
+        $.ajax({
+            url: "http://localhost:3000/select/member",
+            type: "post",
+            data: { id }
+        }).done(function (x) {
+            var data = JSON.parse(x);
+            // console.log(data)
+            var total_money = Number(data[0].member_money) + Number(stored)
+            $(".member_money").append(`${total_money}元`)
+            $.ajax({
+                url: 'http://localhost:3000/update/membermoney',
+                type: "PUT",
+                data: {
+                    id: id,
+                    money: stored
+                }
+            })
+        })
+        $(".stored").append(`${stored}元`).css("font-weight", "bold")
+        $(".time").append(`${date.getFullYear()} / ${tm} / ${td}`)
+        $(".stored_tr").on("click", function () {
+            // 確定儲值按下 傳到交易紀錄，並更新錢包金額
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:3000/insert/traderecord',
+                data: {
+                    id: id,
+                    amount: stored,
+                    date: `${date.getFullYear()}/${tm}/${td}`,
+                    time: `${th}:${tmin}:${ts}`,
+                    counterparty: bank,
+                    type: "0",
+                }
+            })
+
+            // 判斷轉至繳費頁面還是首頁
+            var url = sessionStorage.getItem('returnUrl');
+            if (url) {
+                window.location = "./Payment.html"
+                sessionStorage.removeItem('returnUrl')
+            } else {
+                window.location = "./Gold_flow_home.html"
+            }
+
+        })
+
+        $(".Gold_flow_home_page").on("click", function(){
+            window.location = "./Gold_flow_home.html"
+        })
+    </script>
+</body>
+
+</html>

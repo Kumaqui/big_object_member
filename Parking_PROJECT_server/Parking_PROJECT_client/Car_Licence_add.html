@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增車牌</title>
+    <!-- bootstrap5-->
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        button {
+            border: none;
+            background-color: transparent;
+        }
+
+        .back_btn {
+            color: white;
+            text-align: center;
+            font-size: 40px;
+            position: fixed;
+            margin-left: 0%;
+        }
+
+
+        img {
+            width: 150px;
+        }
+
+        .bg_blue {
+            background-color: #0069B4;
+        }
+        .color_white{
+            color: white;
+        }
+        .border_none{
+            border: none;
+            background-color: transparent;
+        }
+        .btn_i {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+        .dis_flex_row_j_center{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg_blue">
+        <div style="position: absolute; left:5px">
+            <button class="border_none color_white btn_i Gold_flow_home_page">
+                x
+            </button>
+        </div>
+        <div class=" dis_flex_row_j_center pt-1">
+            <h2 class="color_white">
+                <b>新增繳費車牌號碼</b>
+            </h2>
+        </div>
+    </div>
+    <div style="background-color: white;">
+        <div class="container" >
+            <div class="row">
+                <div class="col-12" style="text-align:center">
+                    <img src="https://s.yimg.com/os/zh-Hant-TW/homerun/zeek__596/c72e204227f883d88d72a85796f6dab6">
+                </div>
+                <div class="col-12" style="text-align:center">
+                    <h4>
+                        請輸入您的車牌號碼
+                    </h4>
+                </div>
+                <div class="col-12" style="text-align:center">
+                    <h6 style="color: #0069B4;">
+                        ①車號需為數字、英文、"-"號碼組合
+                    </h6>
+                </div>
+                <input id="license" class="col-12" type="text"
+                    style="text-align:center; font-size: 18px; background-color: rgba(206, 206, 206, 0.302);border-radius: 10px;"
+                    placeholder="EX:ABC-123">
+                <div class="col-12" style="text-align:center">
+                    <h5 style="padding-top: 15px;">
+                        請選擇車種
+                    </h5>
+                </div>
+                <div class="col-6" style="text-align: left">
+                    <h4>汽車</h4>
+                </div>
+                <div class="col-6" style="text-align: right;">
+                    <input type="radio" name="cartype" id="" style="height:20px;width:20px;">
+                </div>
+                <hr>
+                <div class="col-6" style="text-align: left">
+                    <h4>一般輕、重型機車</h4>
+                </div>
+                <div class="col-6" style="text-align: right;">
+                    <input type="radio" name="cartype" id="" style="height:20px;width:20px;">
+                </div>
+                <hr>
+                <div class="col-6" style="text-align: left">
+                    <h4>250CC 以上重型機車</h4>
+                </div>
+                <div class="col-6" style="text-align: right;">
+                    <input type="radio" name="cartype" id="" style="height:20px;width:20px;">
+                </div>
+                <hr>
+                <div class="col-12" style="padding-top: 40px;">
+                    <button id="OK" class="bg_blue color_white dis_flex_center"
+                        style="width:100%; border-radius: 20px; ">
+                        <h4><b>完成</b> </h4>
+                    </button>
+                </div>
+
+
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+    <script>
+        var member_ac = localStorage.getItem("member_ac")
+        if (!member_ac) {
+            window.location = "./login.html"
+        }
+    </script>
+    <script>
+        var id = localStorage.getItem("memberID")
+        console.log(id)
+        $('#OK').on('click', function () {
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:3000/insert/license',
+                data: {
+                    id: id,
+                    license: $("#license").val()
+                }
+            }).done(function () {
+                window.location = "./Gold_flow_home.html"
+            })
+        })
+        $(".Gold_flow_home_page").on("click", function () {
+            window.location = "./Gold_flow_home.html"
+        })
+    </script>
+</body>
+
+</html>

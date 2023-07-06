@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking map</title>
+    <!-- leaflet -->
+    <script src="./assets/js/map_control_js/leaflet/leaflet.js"></script>
+    <script src="./assets/js/map_control_js/leaflet/leaflet-src.js"></script>
+    <link rel="stylesheet" href="./assets/css/map_control_css/leaflet/leaflet.css" />
+
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/map_css/map.css">
+    <script src="./assets/js/BS5_js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <!-- routing machine -->
+    <script src="./assets/js/map_control_js/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/map_control_css/leaflet-sidebar.css" />
+    <!-- geasearch -->
+    <link rel="stylesheet" href="./assets/css/map_control_css/geosearch.css">
+    <script src="./assets/js/map_control_js/geosearch.js"></script>
+    <!-- MarkerCluster -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <meta charset="UTF-8">
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- chart -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        #topBar {
+            z-index: 20;
+            position: absolute;
+            top: 0;
+        }
+
+        #searchBar {
+            z-index: 15;
+            position: absolute;
+            top: 0;
+        }
+
+        #searchInfo {
+            z-index: 15;
+            position: absolute;
+            bottom: 0;
+        }
+
+        #userPlaceBtn {
+            position: absolute;
+            right: 10px;
+            top: 140px;
+            z-index: 16;
+            padding: 5px 5px 4px;
+            border-radius: 50%;
+            border: 0px;
+            background-color: white;
+            box-shadow: 0 0 5px gray;
+        }
+
+        #userPlaceBtn img {
+            width: 30px;
+        }
+
+        #targetBtn {
+            position: absolute;
+            right: 10px;
+            top: 200px;
+            z-index: 16;
+            padding: 5px 5px 4px;
+            border-radius: 50%;
+            border: 0px;
+            background-color: white;
+            box-shadow: 0 0 5px gray;
+        }
+
+        #targetBtn img {
+            width: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導覽列 -->
+    <div id="topBar">
+        <div
+            style="background-color: #0069B4; display: flex; justify-content: space-between; align-items: center; padding: 10px;width: 390px;">
+            <div class="list" style="display: flex; align-items: center;">
+                <span class="list-icon" onclick="toggleListMenu()"><i class="fas fa-bars"
+                        style="color: white;cursor: pointer;"></i></span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <span class="fa-stack fa-xl" style="margin-right: 15px;z-index: 99;" onclick="showDialog_info()">
+                    <i class="far fa-circle fa-stack-1x" style="color: white;font-size: 1.5em;cursor: pointer;"></i>
+                    <i class="fas fa-info fa-stack-1x fa-inverse" style="color: white;cursor: pointer;"></i>
+                </span>
+                <span class="fa-stack fa-xl" style="z-index: 99;">
+                    <i id="redo" class="fas fa-redo fa-rotate-60" style="color: white;cursor: pointer;"
+                        onclick="window.location.reload()"></i>
+                </span>
+                <span class="fa-stack fa-xl" style="z-index: 99;">
+                    <i class="fas fa-layer-group" style="color: white;cursor: pointer;" onclick="showDialog_map()"></i>
+                </span>
+            </div>
+        </div>
+        <!-- 下拉選單 -->
+        <ul class="list-menu" style="display: none;z-index: 99;background-color: white;cursor: pointer;width: 100%;">
+
+            <!-- <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">繳費紀錄</button>
+            </div>
+
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">付費車牌</button>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">個人資訊</button>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">付款方式</button>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">通知中心</button>
+            </div>
+            <div id="logIO" class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">登入</button>
+            </div> -->
+        </ul>
+    </div>
+    <!-- 覆蓋式視窗 -->
+    <!-- 車位類型 -->
+    <dialog id="Dialog_info">
+        <div class="dialog-header">
+            <h6 class="dialog-title">停車位類型</h6>
+            <i class="fas fa-times fa-xs close-icon" onclick="closeDialog_info()"></i>
+        </div>
+        <div class="dialog_info_content">
+            <br>
+            <img src="./assets/image/map_image/parking_type.svg" alt="">
+
+        </div>
+        <br>
+
+    </dialog>
+    <!-- 地圖選擇 -->
+    <dialog id="Dialog_map">
+        <div class="dialog-header">
+            <h6 class="dialog-title">地圖選擇</h6>
+            <i class="fas fa-times fa-xs close-icon" onclick="closeDialog_map()"></i>
+        </div>
+        <div class="dialog_map_content">
+            <img id="car_parking_img" class="map_select" src="./assets/image/map_image/car_parking_select.jpg" alt=""
+                style="cursor: pointer;" onclick="">
+            <img id="car_stay_img" class="map_select" src="./assets/image/map_image/car_stay.jpg" alt=""
+                style="cursor: pointer;" onclick="window.location.href = './mobile_carStay_v3.html';">
+        </div>
+    </dialog>
+
+    <div id="searchBar">
+        <!-- <div class="search-box">
+            <i id="map_mark" class="fas fa-map-marker-alt "
+                style="font-size: 1.1em;; color: rgba(128, 128, 128, 0.66);"></i>
+            <input type="text" class="search-input border-0" placeholder="想去哪裡?">
+            <i id="doSearch" class="btn fas border-0 fa-search"
+                style="font-size: 1.1em; color: rgba(128, 128, 128, 0.66);"></i>
+        </div> -->
+        <div>
+            <div id="filter">
+                <label for="distance_select"></label>
+                <select id="distance_select">
+                    <option value="2000">距離(預設)</option>
+                    <option value="300">300公尺內</option>
+                    <option value="500">500公尺內</option>
+                    <option value="800">800公尺內</option>
+                </select>
+                <label for="special_select"></label>
+                <select id="special_select">
+                    <option value="non_special">特殊車位(不限)</option>
+                    <option value="disabled">身障車位</option>
+                    <option value="parent">親子車位</option>
+                </select>
+                <label for="type_select"></label>
+                <select id="type_select">
+                    <option value="non_parking_type">車位類型(不限)</option>
+                    <option value="parking-lot">停車場</option>
+                    <option value="roadside-all">路邊停車(全部)</option>
+                    <option value="roadside-empty">路邊停車(空位)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- track user place btn-->
+    <button id="userPlaceBtn"><img src="./assets/image/map_control_img/user_place.png" alt=""> </button>
+    <button id="targetBtn"><img src="./assets/image/map_control_img/search_target.png" alt=""> </button>
+
+    <!-- 手風琴(開關式選單) -->
+    <div class="sidebar" id="searchInfo">
+        <button id="toggle-sidebar">
+            <i class="fas fa-caret-down" style="color: #0069B4;"></i>
+        </button>
+
+        <br>
+        <!-- 停車格選單 -->
+        <div id="parking_road_item" class="accordion" id="accordion_map_list">
+            <div class="accordion-item" v-for="(parking, index) in parkingRoad" :key="index" v-if="parking.distance <= 2000 && parking.distance > 0 && parking.status === '0'">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" :class="{active: activeCollapse === index}"
+                        @click="toggleCollapse(index)">
+                        <button class="accordion-button" :class="{ collapsed: activeCollapse !== index }" type="button">
+                            <p class="parking_name">{{ parking.rdname }}</p>
+                            <p class="parking_subname"> ( {{ parking.se_road }} )</p>
+                            <div class="special-group">
+
+                                <div id="ParkingTypeR" style="display: none;">{{parking.ParkingType}}</div>
+                                <img v-if="parking.PS_type === '1'" id="handicapped"
+                                    src="./assets/image/map_image/handicapped.svg" style="margin: 2px;" alt="">
+                                <img v-if="parking.PS_type === '2'" id="Parent_Child"
+                                    src="./assets/image/map_image/Parent_Child.svg" style="margin: 2px;" alt="">
+                                <span v-if="parking.PS_type === '0'" style="margin: 2px;" alt="">&nbsp;</span>
+
+                                <img v-if="parking.status === '0'" id="status_light"
+                                    src="./assets/image/map_image/Vector_green.svg" style="margin: 4.2px;" alt="">
+                                <img v-else src="./assets/image/map_image/Vector_red.svg" style="margin: 4.2px;" alt="">
+                            </div>
+                        </button>
+                    </h2>
+                    <div :id="'collapse' + index" class="accordion-collapse collapse"
+                        :class="{show: activeCollapse === index}">
+                        <div class="accordion-body">
+                            <div id="load_addr">
+                                <p>車格編號：{{ parking.ceiiId }}</p>
+                            </div>
+                            <div class="row">
+                                <div id="update_info" class="col-8">
+                                    <p class="up_time">更新時間：{{ parking.Updatetime }}</p>
+                                </div>
+                                <div id="distance_info" class="col-4">
+                                    <p class="distance">{{ parking.distanceKM }}公里{{ parking.distanceM }}公尺</p>
+                                    <p class="distanceR" style="display: none;">{{ parking.distance }}</p>
+                                    <p class="distance_time">{{ parking.travelTime }}分鐘</p>
+                                </div>
+                            </div>
+                            <div id="roadX" style="display:none;">{{ parking.TWD97_X }}</div>
+                            <div id="roadY" style="display:none;">{{ parking.TWD97_Y }}</div>
+
+                            <img id="view_fee" class="btn" src="./assets/image/map_image/show_fee-btn.svg"
+                                @click="showDialog_roadfee(parking.paycash)" alt="">
+                            <!-- <img id="like" class="btn" src="./assets/image/map_image/like_btn.svg" alt=""> -->
+                            <img id="go" class="btn" src="./assets/image/map_image/go_btn.svg"
+                                @click="routing(parking.TWD97_Y, parking.TWD97_X)" alt="">
+                        </div>
+                    </div>
+                </div>
+                <!-- 收費資訊 -->
+                <dialog :key="parking.id" id="Dialog_road_fee">
+                    <div class="dialog-header">
+                        <h6 class="dialog-title">收費方式</h6>
+                        <i class="fas fa-times fa-xs close-icon" @click="closeDialog_roadfee()"></i>
+                    </div>
+                    <div class="dialog_fee_content">
+                        <h6>{{dialog_roadfee_content}}</h6>
+                    </div>
+                </dialog>
+            </div>
+        </div>
+
+        <!-- 停車場選單 -->
+        <div id="parking_lot_item" class="accordion" id="accordion_map_list">
+            <div class="accordion-item" v-for="(parking_name, index) in parkingLot" :key="index" v-if="parking_name.distance <= 2000">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" v-on:click="toggleCollapse(parking_name.id)"
+                        :class="{'collapsed': activeCollapse !== parking_name.id }"
+                        :aria-expanded="activeCollapse === parking_name.id"
+                        :aria-controls="'collapse-' + parking_name.id">
+                        <div style="display: flex; flex-direction: column;">
+                            <p class="parking_position" style="font-size: 18px;">{{ parking_name.Position }}</p>
+                        </div>
+                        <div class="special-group">
+                            <div id="ParkingTypeL" style="display: none;">{{parking_name.ParkingType}}</div>
+                            <img v-if="parking_name.Type.includes(2)" id="Parent_Child"
+                                src="./assets/image/map_image/Parent_Child.svg" style="margin: 2px;" alt="">
+                            <img v-if="parking_name.Type.includes(1)" id="handicapped"
+                                src="./assets/image/map_image/handicapped.svg" style="margin: 2px;" alt="">
+                            <img v-if=" 1-(parking_name.AvailableCar/parking_name.TotalCar) < 0.3"
+                                src="./assets/image/map_image/P-green.svg" style="margin: 2px;" alt="">
+                            <img v-else-if="  1-(parking_name.AvailableCar/parking_name.TotalCar) >= 0.3 && 1-(parking_name.AvailableCar/parking_name.TotalCar) <= 0.6"
+                                src="./assets/image/map_image/P-yellow.svg" style="margin: 2px;" alt="">
+                            <img v-else src="./assets/image/map_image/P-red.svg" style="margin: 2px;" alt="">
+                        </div>
+                    </button>
+                </h2>
+                <div :id="'collapse-' + parking_name.id" class="accordion-collapse collapse"
+                    :class="{'show': activeCollapse === parking_name.id }"
+                    :aria-labelledby="'heading-' + parking_name.id" data-bs-parent="#accordion_map_list">
+                    <div class="accordion-body">
+                        <div id="list_detail">
+                            <div id="number" style="display: flex; flex-direction: row;">
+                                <p class="leftover">空車位：</p>
+                                <p class="leafover_num">{{ parking_name.AvailableCar }}</p>
+                                <p class="total_name">&nbsp;/&nbsp;總車位：</p>
+                                <p class="total_num">{{ parking_name.TotalCar }}</p>
+                            </div>
+                            <div class="row">
+                                <div id="update_info" class="col-8">
+                                    <p class="up_time">更新時間：{{ parking_name.Updatetime }}</p>
+                                </div>
+                                <div id="distance_info" class="col-4">
+                                    <p class="distance">{{ parking_name.distanceKM }}公里{{ parking_name.distanceM }}公尺
+                                    </p>
+                                    <p class="distance" style="display: none;">{{ parking_name.distance }}</p>
+                                    <p class="distance_time">{{ parking_name.travelTime }} 分鐘</p>
+                                </div>
+                            </div>
+                            <div id="lotX" style="display:none;">{{ parking_name.X }}</div>
+                            <div id="lotY" style="display:none;">{{ parking_name.Y }}</div>
+
+                            <div id="btn_group">
+                                <img id="view_fee" class="btn" src="./assets/image/map_image/show_fee-btn.svg"
+                                    @click="showDialog_fee(parking_name.Notes)" alt="">
+                                <!-- <img id="like" class="btn" src="./assets/image/map_image/like_btn.svg" alt=""> -->
+                                <img id="go" class="btn" src="./assets/image/map_image/go_btn.svg"
+                                    @click="routing(parking_name.Y, parking_name.X)" alt="">
+                            </div>
+                            <div id="popular_time_graph" class="row">
+                                <p class="col-12" style="font-size: 16px;">熱門時段</p>
+                                <div class="main divWeeks" id="divWeek"
+                                    style="width: 380px;height: 270px; border: 1px solid #838080;border-radius: 2%;">
+                                    <div class="chart-box dark">
+                                        <div class="chart-body ">
+                                            <canvas id="myChart" width="100" height="90"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <img src="./assets/image/map_image/popular_time_graph.svg" alt=""> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 收費資訊 -->
+                <dialog :key="parking_name.id" id="Dialog_fee">
+                    <div class="dialog-header">
+                        <h6 class="dialog-title">收費方式</h6>
+                        <i class="fas fa-times fa-xs close-icon" @click="closeDialog_fee()"></i>
+                    </div>
+                    <div class="dialog_fee_content">
+                        <h6>{{dialog_fee_content}}</h6>
+                    </div>
+                </dialog>
+            </div>
+        </div>
+ 
+        
+
+        <br><br><br><br><br><br><br><br><br><br>
+        <!-- Add more accordion items here -->
+
+    </div>
+
+
+    <script>
+        //地圖顯示相關設定
+        let zoom = 15; // 0 - 18
+        let center = [24.137508915419836, 120.68694731120945]; // 中心點座標
+        let map = L.map('map').setView(center, zoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap', // 商用時必須要有版權出處
+            maxNativeZoom: 20,
+            maxZoom: 20,
+            layerLimit: 20, // 設定顯示圖層數量上限為 20
+            zoomControl: true, // 是否秀出 - + 按鈕
+        }).addTo(map);
+        // remove zoomControl
+        map.zoomControl.remove();
+
+        // 設定icon
+        //停車場座標icon
+        var park60 = L.icon({ //add this new icon
+            iconUrl: './assets/image/map_control_img/park60.png',
+            iconSize: [20, 25], // size of the icon
+        }); //停車場綠燈座標圖
+        var park30 = L.icon({
+            iconUrl: './assets/image/map_control_img/park30.png',
+            iconSize: [20, 25],
+        }); //停車場黃燈座標圖
+        var park0 = L.icon({
+            iconUrl: './assets/image/map_control_img/park0.png',
+            iconSize: [20, 25]
+        }); //停車場紅燈座標圖
+
+        // 標籤匯入class
+        let parkingClass = (markClass, className) => {
+            let mark = markClass.closePopup();
+            mark._icon.classList.add(className);
+        }
+
+        // 停車場標籤屬性匯入提示窗
+        function inputInfo(parkDct, marker) {
+            if (parkDct['AvailableCar'] < 0) {
+                var CorrectAvailableCar = 0;
+                marker.bindPopup(`
+                            <h6>${parkDct['Position']}</h6>
+                            <h6>總車位數：${parkDct['TotalCar']}</h6>
+                            <h6>剩餘車位：${CorrectAvailableCar}</h6>
+                            <button style='font-size: 14px;' onclick="routing(${parkDct['Y']}, ${parkDct['X']})">開始導航</button>
+                        `)
+                // add parking info to list(if AvailableCar < 0)
+            } else {
+                marker.bindPopup(`
+                            <h6>${parkDct['Position']}</h6>
+                            <h6>總車位數：${parkDct['TotalCar']}</h6>
+                            <h6>剩餘車位：${parkDct['AvailableCar']}</h6>
+                            <button style='font-size: 14px;' onclick="routing(${parkDct['Y']}, ${parkDct['X']})">開始導航</button>
+                        `)
+                // add parking info to list(if AvailableCar >= 0)
+            }
+        }
+
+        // 車格標籤屬性匯入提示窗
+        function roadLotInfo(parkDct, marker) {
+            marker.bindPopup(`
+                <h6>車格編號：${parkDct['PS_ID']}</h6>
+                <button style='font-size: 14px;' onclick="routing(${parkDct['PS_Lat']}, ${parkDct['PS_Lng']})">開始導航</button>
+            `)
+        }
+
+        // 導航
+        function routing(y, x) {
+            // 導向google導航網頁
+            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + y + ',' + x;
+            window.location.assign(url);
+        }
+
+        // 持續刷新使用者位置並取得路邊停車點位
+        function refrash_user() {
+            navigator.geolocation.watchPosition(success, error);
+        }
+        setInterval(refrash_user(), 60000);
+
+        // user icon
+        var userIcon = L.icon({
+            iconUrl: './assets/image/map_control_img/user_place.png',
+            iconSize: [60, 60],
+            className: 'userIcon'
+        });
+        // search icon
+        var searchIcon = L.icon({
+            iconUrl: './assets/image/map_control_img/Target.png',
+            iconSize: [35, 40],
+        });
+
+        // geosearch(搜尋bar) 
+        const search = new GeoSearch.GeoSearchControl({
+            provider: new GeoSearch.OpenStreetMapProvider(),
+            style: 'bar',
+            showMarker: false,
+            // marker: searchPlace,
+        });
+        map.addControl(search);
+
+        let usermarker, userCircle, userZoomed, userlat, userlng, searchlat = 0, searchlng = 0, searchmarker = undefined, searchCircle;
+
+        searchCircle = L.circle([0, 0], {
+            color: 'blue',
+            fillColor: '#005DFF70',
+            fillOpacity: 0.3,
+            radius: 0
+        }).addTo(map);
+
+        // 讀取暫存資料送到搜尋框
+        let searchPlace = sessionStorage.getItem('searchInfo');
+        $('.glass').val(searchPlace);
+        if ($('.glass').val() == searchPlace) {
+            document.addEventListener('DOMContentLoaded', function () {
+                $('form').submit(function () {
+                    event.preventDefault();
+                });
+
+                // $('.glass').trigger($.Event("keypress", { key: "Enter" }));
+            })
+        }
+
+
+        // 提示未啟用定位
+        function error(err) {
+            if (err.code === 1) {
+                alert("無法獲得位置資訊，請開啟定位功能或使用搜尋欄搜尋您所在地點");
+            } else {
+                alert('已啟用定位功能')
+            }
+        }
+
+        let targetPoint = [];
+        let targetDis = [];
+        // 直接提供最近停車點位導航
+        $('#targetBtn').on('click', function () {
+            console.log(Math.min(...targetDis));
+            let targetIndex = targetDis.indexOf(Math.min(...targetDis));
+            // console.log(targetPoint[targetIndex]);
+            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + targetPoint[targetIndex][0] + ',' + targetPoint[targetIndex][1];
+            window.location.assign(url);
+        });
+
+        function success(pos, area = $('#distance_select').val()) {
+
+            userlat = pos.coords.latitude;
+            userlng = pos.coords.longitude;
+            // reset marker and circle
+            if (usermarker) {
+                map.removeLayer(usermarker);
+            }
+            if (userCircle) {
+                map.removeLayer(userCircle);
+            }
+            map.setZoom(15);
+            // add user marker
+            usermarker = L.marker([userlat, userlng], { icon: userIcon }).addTo(map);
+            // userplace callback
+            addUserPlace(area, userlat, userlng);
+
+        }
+
+        // userplace function
+        addUserPlace = (area, userlat, userlng) => {
+            // add area
+            // console.log('ok')
+            if (area == "2000") {
+                userCircle = L.circle([userlat, userlng], {
+                    color: 'blue',
+                    fillColor: '#005DFF70',
+                    fillOpacity: 0.3,
+                    radius: 0
+                }).addTo(map);
+            } else {
+                userCircle = L.circle([userlat, userlng], {
+                    color: 'blue',
+                    fillColor: '#005DFF70',
+                    fillOpacity: 0.3,
+                    radius: area
+                }).addTo(map);
+            }
+
+            // switch center views
+            if (!userZoomed) {
+                userZoomed = map.fitBounds(userCircle.getBounds())
+            }
+
+            refrash_park();
+
+            switch ($('#type_select').val()) {
+                case "parking-lot":
+                    $(".parkDisabled").show();
+                    $(".parkParents").show();
+                    $(".parkNormal").show();
+                    $('.marker-cluster').hide();
+                    switch ($('#special_select').val()) {
+                        case "disabled":
+                            $(".parkParents").hide();
+                            $(".parkNormal").hide();
+                            break;
+                        case "parent":
+                            $(".parkDisabled").hide();
+                            $(".parkNormal").hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "roadside-all":
+                    $(".parkDisabled").hide();
+                    $(".parkParents").hide();
+                    $(".parkNormal").hide();
+                    $('.marker-cluster').show();
+                    switch ($('#special_select').val()) {
+                        case "disabled":
+                            refrash_road($('#distance_select').val(), "disabled");
+                            search_road($('#distance_select').val(), "disabled");
+                            break;
+                        case "parent":
+                            refrash_road($('#distance_select').val(), "parent");
+                            search_road($('#distance_select').val(), "parent");
+                            break;
+                        default:
+                            refrash_road($('#distance_select').val(), $('#special_select').val());
+                            search_road($('#distance_select').val(), $('#special_select').val());
+                            break;
+                    }
+                    break;
+                default:
+                    $(".parkDisabled").show();
+                    $(".parkParents").show();
+                    $(".parkNormal").show();
+                    switch ($('#special_select').val()) {
+                        case "disabled":
+                            $(".parkParents").hide();
+                            $(".parkNormal").hide();
+                            refrash_road($('#distance_select').val(), "disabled");
+                            search_road($('#distance_select').val(), "disabled");
+                            break;
+                        case "parent":
+                            $(".parkDisabled").hide();
+                            $(".parkNormal").hide();
+                            refrash_road($('#distance_select').val(), "parent");
+                            search_road($('#distance_select').val(), "parent");
+                            break;
+                        default:
+                            refrash_road($('#distance_select').val(), $('#special_select').val());
+                            search_road($('#distance_select').val(), $('#special_select').val());
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        // switch to userplace
+        $('#userPlaceBtn').on('click', function () {
+            map.setView([userlat, userlng], 15);
+            resetClick();
+            $('.glass').val("");
+        })
+
+        // display search marker
+        map.on('geosearch/showlocation', function (e) {
+            $('.userIcon').remove();
+            map.removeLayer(userCircle);
+            if (markers) {
+                markers.clearLayers()
+            }
+
+            searchlat = e.location.y;
+            searchlng = e.location.x;
+            map.setZoom(16);
+            // reset marker and circle
+            if (searchmarker) {
+                searchMarkers.clearLayers()
+                map.removeLayer(searchCircle);
+                // map.removeLayer(userCircle);
+            }
+            // add search marker
+            searchmarker = L.marker([searchlat, searchlng], { icon: searchIcon }).addTo(map);
+            if ($('#distance_select').val() == "2000") {
+                searchCircle = L.circle([searchlat, searchlng], {
+                    color: 'blue',
+                    fillColor: '#005DFF70',
+                    fillOpacity: 0.3,
+                    radius: 0
+                }).addTo(map);
+            } else {
+                searchCircle = L.circle([searchlat, searchlng], {
+                    color: 'blue',
+                    fillColor: '#005DFF70',
+                    fillOpacity: 0.3,
+                    radius: $('#distance_select').val()
+                }).addTo(map);
+            }
+            // add search road parkin lot
+            switch ($('#type_select').val()) {
+                case "parking-lot":
+                    $(".parkDisabled").show();
+                    $(".parkParents").show();
+                    $(".parkNormal").show();
+                    $('.marker-cluster').hide();
+                    switch ($('#special_select').val()) {
+                        case "disabled":
+                            $(".parkParents").hide();
+                            $(".parkNormal").hide();
+                            break;
+                        case "parent":
+                            $(".parkDisabled").hide();
+                            $(".parkNormal").hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "roadside-all":
+                    $(".parkDisabled").hide();
+                    $(".parkParents").hide();
+                    $(".parkNormal").hide();
+                    $('.marker-cluster').show();
+                    switch ($('#special_select').val()) {
+                        case "disabled":
+                            search_road($('#distance_select').val(), "disabled");
+                            break;
+                        case "parent":
+                            search_road($('#distance_select').val(), "parent");
+                            break;
+                        default:
+                            search_road($('#distance_select').val(), $('#special_select').val());
+                            break;
+                    }
+                    break;
+                default:
+                    $(".parkDisabled").show();
+                    $(".parkParents").show();
+                    $(".parkNormal").show();
+                    switch ($('#special_select').val()) {
+                        case "disabled":
+                            $(".parkParents").hide();
+                            $(".parkNormal").hide();
+                            search_road($('#distance_select').val(), "disabled");
+                            break;
+                        case "parent":
+                            $(".parkDisabled").hide();
+                            $(".parkNormal").hide();
+                            search_road($('#distance_select').val(), "parent");
+                            break;
+                        default:
+                            search_road($('#distance_select').val(), $('#special_select').val());
+                            break;
+                    }
+                    break;
+            }
+
+            // click and remove marker
+            $('.reset').click(function () {
+                resetClick();
+            })
+
+        });
+
+        // reset search
+        function resetClick() {
+            usermarker = L.marker([userlat, userlng], { icon: userIcon }).addTo(map);
+            searchMarkers.clearLayers();
+            map.removeLayer(searchCircle);
+            map.removeLayer(searchmarker);
+            searchmarker = undefined;
+            refrash_road($('#distance_select').val(), $('#special_select').val());
+            if ($('#distance_select').val() == "2000") {
+                userCircle = L.circle([userlat, userlng], {
+                    color: 'blue',
+                    fillColor: '#005DFF70',
+                    fillOpacity: 0.3,
+                    radius: 0
+                }).addTo(map);
+            } else {
+                userCircle = L.circle([userlat, userlng], {
+                    color: 'blue',
+                    fillColor: '#005DFF70',
+                    fillOpacity: 0.3,
+                    radius: $('#distance_select').val()
+                }).addTo(map);
+            }
+        }
+
+        // change area
+        $('#distance_select').change(function () {
+            if (usermarker || userCircle) {
+                map.removeLayer(userCircle);
+                if ($(this).val() == "2000") {
+                    refrash_road($(this).val(), $('#special_select').val());
+                } else {
+                    userCircle = L.circle([userlat, userlng], {
+                        color: 'blue',
+                        fillColor: '#005DFF70',
+                        fillOpacity: 0.3,
+                        radius: $(this).val()
+                    }).addTo(map);
+                    refrash_road($(this).val(), $('#special_select').val()), 1000
+                }
+            } else {
+                map.removeLayer(searchCircle);
+                if ($(this).val() == "2000") {
+                    search_road($(this).val(), $('#special_select').val());
+                } else {
+                    searchCircle = L.circle([searchlat, searchlng], {
+                        color: 'blue',
+                        fillColor: '#005DFF70',
+                        fillOpacity: 0.3,
+                        radius: $(this).val()
+                    }).addTo(map);
+                    search_road($(this).val(), $('#special_select').val());
+                }
+            }
+        })
+
+        // change parking type
+        $('#type_select').change(function () {
+            if (usermarker) {
+                switch ($(this).val()) {
+                    case "parking-lot":
+                        $(".parkDisabled").show();
+                        $(".parkParents").show();
+                        $(".parkNormal").show();
+                        searchMarkers.clearLayers();
+                        markers.clearLayers();
+                        switch ($('#special_select').val()) {
+                            case "disabled":
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                break;
+                            case "parent":
+                                $(".parkDisabled").hide();
+                                $(".parkNormal").hide();
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case "roadside-all":
+                        $(".parkDisabled").hide();
+                        $(".parkParents").hide();
+                        $(".parkNormal").hide();
+                        switch ($('#special_select').val()) {
+                            case "disabled":
+                                refrash_road($('#distance_select').val(), "disabled");
+                                break;
+                            case "parent":
+                                refrash_road($('#distance_select').val(), "parent");
+                                break;
+                            default:
+                                refrash_road($('#distance_select').val(), $('#special_select').val());
+                                break;
+                        }
+                        break;
+                    case "roadside-empty":
+                        $(".parkDisabled").hide();
+                        $(".parkParents").hide();
+                        $(".parkNormal").hide();
+                        refrash_road($('#distance_select').val(), "roadside-empty");
+                        break;
+                    default:
+                        $(".parkDisabled").show();
+                        $(".parkParents").show();
+                        $(".parkNormal").show();
+                        switch ($('#special_select').val()) {
+                            case "disabled":
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                refrash_road($('#distance_select').val(), "disabled");
+                                break;
+                            case "parent":
+                                $(".parkDisabled").hide();
+                                $(".parkNormal").hide();
+                                refrash_road($('#distance_select').val(), "parent");
+                                break;
+                            default:
+                                refrash_road($('#distance_select').val(), $('#special_select').val());
+                                break;
+                        }
+                        break;
+                }
+            } else {
+                switch ($(this).val()) {
+                    case "parking-lot":
+                        $(".parkDisabled").show();
+                        $(".parkParents").show();
+                        $(".parkNormal").show();
+                        searchMarkers.clearLayers();
+                        markers.clearLayers();
+                        switch ($('#special_select').val()) {
+                            case "disabled":
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                break;
+                            case "parent":
+                                $(".parkDisabled").hide();
+                                $(".parkNormal").hide();
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case "roadside-all":
+                        $(".parkDisabled").hide();
+                        $(".parkParents").hide();
+                        $(".parkNormal").hide();
+                        switch ($('#special_select').val()) {
+                            case "disabled":
+                                search_road($('#distance_select').val(), "disabled");
+                                break;
+                            case "parent":
+                                search_road($('#distance_select').val(), "parent");
+                                break;
+                            default:
+                                search_road($('#distance_select').val(), $('#special_select').val());
+                                break;
+                        }
+                        break;
+                    case "roadside-empty":
+                        $(".parkDisabled").hide();
+                        $(".parkParents").hide();
+                        $(".parkNormal").hide();
+                        search_road($('#distance_select').val(), "roadside-empty");
+                        break;
+                    default:
+                        $(".parkDisabled").show();
+                        $(".parkParents").show();
+                        $(".parkNormal").show();
+                        switch ($('#special_select').val()) {
+                            case "disabled":
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                search_road($('#distance_select').val(), "disabled");
+                                break;
+                            case "parent":
+                                $(".parkDisabled").hide();
+                                $(".parkNormal").hide();
+                                search_road($('#distance_select').val(), "parent");
+                                break;
+                            default:
+                                search_road($('#distance_select').val(), $('#special_select').val());
+                                break;
+                        }
+                        break;
+                }
+
+            }
+        })
+
+        // change park lot type
+        $('#special_select').change(function () {
+            if (usermarker) {
+                switch ($(this).val()) {
+                    case "disabled":
+                        $(".parkDisabled").show();
+                        $(".parkParents").hide();
+                        $(".parkNormal").hide();
+                        refrash_road($('#distance_select').val(), "disabled");
+                        switch ($('#type_select').val()) {
+                            case "parking-lot":
+                                $('.marker-cluster').hide();
+                                break;
+                            case "roadside-all":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                $('.marker-cluster').show();
+                                break;
+                            case "roadside-empty":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                refrash_road($('#distance_select').val(), "roadside-empty");
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case "parent":
+                        $(".parkDisabled").hide();
+                        $(".parkParents").show();
+                        $(".parkNormal").hide();
+                        refrash_road($('#distance_select').val(), "parent");
+                        switch ($('#type_select').val()) {
+                            case "parking-lot":
+                                $('.marker-cluster').hide();
+                                break;
+                            case "roadside-all":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                $('.marker-cluster').show();
+                                break;
+                            case "roadside-empty":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                refrash_road($('#distance_select').val(), "roadside-empty");
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        $(".parkDisabled").show();
+                        $(".parkParents").show();
+                        $(".parkNormal").show();
+                        refrash_road($('#distance_select').val(), "other");
+                        switch ($('#type_select').val()) {
+                            case "parking-lot":
+                                $('.marker-cluster').hide();
+                                break;
+                            case "roadside-all":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                $('.marker-cluster').show();
+                                break;
+                            case "roadside-empty":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                refrash_road($('#distance_select').val(), "roadside-empty");
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                }
+            } else {
+                switch ($(this).val()) {
+                    case "disabled":
+                        $(".parkDisabled").show();
+                        $(".parkParents").hide();
+                        $(".parkNormal").hide();
+                        search_road($('#distance_select').val(), "disabled");
+                        switch ($('#type_select').val()) {
+                            case "parking-lot":
+                                $('.marker-cluster').hide();
+                                break;
+                            case "roadside-all":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                $('.marker-cluster').show();
+                                break;
+                            case "roadside-empty":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                search_road($('#distance_select').val(), "roadside-empty");
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case "parent":
+                        $(".parkDisabled").hide();
+                        $(".parkParents").show();
+                        $(".parkNormal").hide();
+                        search_road($('#distance_select').val(), "parent");
+                        switch ($('#type_select').val()) {
+                            case "parking-lot":
+                                $('.marker-cluster').hide();
+                                break;
+                            case "roadside-all":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                $('.marker-cluster').show();
+                                break;
+                            case "roadside-empty":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                search_road($('#distance_select').val(), "roadside-empty");
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        $(".parkDisabled").show();
+                        $(".parkParents").show();
+                        $(".parkNormal").show();
+                        search_road($('#distance_select').val(), "other");
+                        switch ($('#type_select').val()) {
+                            case "parking-lot":
+                                $('.marker-cluster').hide();
+                                break;
+                            case "roadside-all":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                $('.marker-cluster').show();
+                                break;
+                            case "roadside-empty":
+                                $(".parkDisabled").hide();
+                                $(".parkParents").hide();
+                                $(".parkNormal").hide();
+                                search_road($('#distance_select').val(), "roadside-empty");
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                }
+            }
+
+        })
+
+        var markers = undefined;
+        var markerList;
+        refrash_road = (cur_area = $('#distance_select').val(), special = $('#special_select').val()) => {
+            // console.log(markers);
+            // $('.marker-cluster').remove();
+            if (markers) {
+                markers.clearLayers();
+            }
+            // add markercluster
+            markers = L.markerClusterGroup();
+
+            markerList = [];
+            let car_parking_url = "https://motoretag.taichung.gov.tw/DataAPI/api/ParkingStreetAPI";
+            let car_parking_xhr = new XMLHttpRequest();
+            car_parking_xhr.open('GET', car_parking_url, true);
+            car_parking_xhr.send();
+            car_parking_xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let response = JSON.parse(this.response);
+                    if (special == "disabled") {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (parkInfo['PS_type'] == '1') {
+                                if (L.latLng(userlat, userlng).distanceTo(L.latLng(roadlat, roadlng)) < cur_area) {
+                                    if (parkInfo['status'] == 0) {
+                                        var parkOk = L.icon({
+                                            iconUrl: './assets/image/map_control_img/no_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadOkDisabled'
+                                        });
+                                        var roadOkDisabled = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                        roadLotInfo(parkInfo, roadOkDisabled);
+                                        markerList.push(roadOkDisabled);
+                                    } else {
+                                        var parkNon = L.icon({
+                                            iconUrl: './assets/image/map_control_img/in_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadNonDisabled'
+                                        });
+                                        var roadNonDisabled = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkNon });
+                                        roadLotInfo(parkInfo, roadNonDisabled);
+                                        markerList.push(roadNonDisabled);
+                                    }
+                                }
+                            }
+                        })
+                    } else if (special == "parent") {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (parkInfo['PS_type'] == '2') {
+                                if (L.latLng(userlat, userlng).distanceTo(L.latLng(roadlat, roadlng)) < cur_area) {
+                                    if (parkInfo['status'] == 0) {
+                                        var parkOk = L.icon({
+                                            iconUrl: './assets/image/map_control_img/no_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadOkParents'
+                                        });
+                                        var roadOkParents = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                        roadLotInfo(parkInfo, roadOkParents);
+                                        markerList.push(roadOkParents);
+                                    } else {
+                                        var parkNon = L.icon({
+                                            iconUrl: './assets/image/map_control_img/in_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadNonParents'
+                                        });
+                                        var roadNonParents = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkNon });
+                                        roadLotInfo(parkInfo, roadNonParents);
+                                        markerList.push(roadNonParents);
+                                    }
+                                }
+                            }
+                        })
+                    }
+                    else if (special == 'roadside-empty') {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (L.latLng(userlat, userlng).distanceTo(L.latLng(roadlat, roadlng)) < cur_area) {
+                                if (parkInfo['status'] == 0) {
+                                    var parkOk = L.icon({
+                                        iconUrl: './assets/image/map_control_img/no_car.png',
+                                        iconSize: [20, 20],
+                                        className: 'roadOk'
+                                    });
+                                    var roadOk = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                    roadLotInfo(parkInfo, roadOk);
+                                    markerList.push(roadOk);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (L.latLng(userlat, userlng).distanceTo(L.latLng(roadlat, roadlng)) < cur_area) {
+                                if (parkInfo['status'] == 0) {
+                                    targetPoint.push([roadlat, roadlng]);
+                                    targetDis.push(L.latLng(userlat, userlng).distanceTo(L.latLng(roadlat, roadlng)));
+                                    var parkOk = L.icon({
+                                        iconUrl: './assets/image/map_control_img/no_car.png',
+                                        iconSize: [20, 20],
+                                        className: 'roadOk'
+                                    });
+                                    var roadOk = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                    roadLotInfo(parkInfo, roadOk);
+                                    markerList.push(roadOk);
+                                } else {
+                                    var parkNon = L.icon({
+                                        iconUrl: './assets/image/map_control_img/in_car.png',
+                                        iconSize: [20, 20],
+                                        className: 'roadNon'
+                                    });
+                                    var roadNon = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkNon });
+                                    roadLotInfo(parkInfo, roadNon);
+                                    markerList.push(roadNon);
+                                }
+                            }
+                        })
+                    }
+                };
+                markers.addLayers(markerList);
+            }
+            map.addLayer(markers);
+        }
+
+        var searchMarkers = undefined;
+        var searchList;
+        search_road = (search_area, special) => {
+            let a = 0;
+            a = search_area;
+            // console.log(a);
+            // search Cluster
+            if (searchMarkers) {
+                searchMarkers.clearLayers()
+            }
+            searchMarkers = L.markerClusterGroup();
+            let car_parking_url = "https://motoretag.taichung.gov.tw/DataAPI/api/ParkingStreetAPI";
+            let car_parking_xhr = new XMLHttpRequest();
+            car_parking_xhr.open('GET', car_parking_url, true);
+            car_parking_xhr.send();
+            car_parking_xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    searchList = [];
+                    let response = JSON.parse(this.response);
+                    if (special == "disabled") {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (parkInfo['PS_type'] == '1') {
+                                if (L.latLng(searchlat, searchlng).distanceTo(L.latLng(roadlat, roadlng)) < a) {
+                                    if (parkInfo['status'] == 0) {
+                                        var parkOk = L.icon({
+                                            iconUrl: './assets/image/map_control_img/no_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadOkDisabled'
+                                        });
+                                        var roadOkDisabled = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                        roadLotInfo(parkInfo, roadOkDisabled);
+                                        searchList.push(roadOkDisabled);
+                                    } else {
+                                        var parkNon = L.icon({
+                                            iconUrl: './assets/image/map_control_img/in_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadNonDisabled'
+                                        });
+                                        var roadNonDisabled = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkNon });
+                                        roadLotInfo(parkInfo, roadNonDisabled);
+                                        searchList.push(roadNonDisabled);
+                                    }
+                                }
+                            }
+                        })
+                    } else if (special == "parent") {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (parkInfo['PS_type'] == '2') {
+                                if (L.latLng(searchlat, searchlng).distanceTo(L.latLng(roadlat, roadlng)) < a) {
+                                    if (parkInfo['status'] == 0) {
+                                        var parkOk = L.icon({
+                                            iconUrl: './assets/image/map_control_img/no_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadOkParents'
+                                        });
+                                        var roadOkParents = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                        roadLotInfo(parkInfo, roadOkParents);
+                                        searchList.push(roadOkParents);
+                                    } else {
+                                        var parkNon = L.icon({
+                                            iconUrl: './assets/image/map_control_img/in_car.png',
+                                            iconSize: [20, 20],
+                                            className: 'roadNonParents'
+                                        });
+                                        var roadNonParents = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkNon });
+                                        roadLotInfo(parkInfo, roadNonParents);
+                                        searchList.push(roadNonParents);
+                                    }
+                                }
+                            }
+                        })
+                    } else if (special == "roadside-empty") {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (L.latLng(searchlat, searchlng).distanceTo(L.latLng(roadlat, roadlng)) < a) {
+                                if (parkInfo['status'] == 0) {
+                                    var parkOk = L.icon({
+                                        iconUrl: './assets/image/map_control_img/no_car.png',
+                                        iconSize: [20, 20],
+                                        className: 'roadOk'
+                                    });
+                                    var roadOk = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                    roadLotInfo(parkInfo, roadOk);
+                                    searchList.push(roadOk);
+                                }
+                            }
+                        });
+                    } else {
+                        $(response).each(function (i, parkInfo) {
+                            var roadlat = Number(parkInfo['PS_Lat']);
+                            var roadlng = Number(parkInfo['PS_Lng']);
+                            if (L.latLng(searchlat, searchlng).distanceTo(L.latLng(roadlat, roadlng)) < a) {
+                                if (parkInfo['status'] == 0) {
+                                    var parkOk = L.icon({
+                                        iconUrl: './assets/image/map_control_img/no_car.png',
+                                        iconSize: [20, 20],
+                                        className: 'roadOk'
+                                    });
+                                    var roadOk = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                    roadLotInfo(parkInfo, roadOk);
+                                    searchList.push(roadOk);
+                                } else {
+                                    var parkNon = L.icon({
+                                        iconUrl: './assets/image/map_control_img/in_car.png',
+                                        iconSize: [20, 20],
+                                        className: 'roadNon'
+                                    });
+                                    var roadNon = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkNon });
+                                    roadLotInfo(parkInfo, roadNon);
+                                    searchList.push(roadNon);
+                                }
+                            }
+                        })
+                    }
+                    searchMarkers.addLayers(searchList);
+                };
+            }
+            map.addLayer(searchMarkers);
+        }
+
+        function refrash_park() {
+            let parking_park_url = "https://motoretag.taichung.gov.tw/DataAPI/api/ParkingSpotListAPI";
+            let parking_park_xhr = new XMLHttpRequest();
+            parking_park_xhr.open('GET', parking_park_url, true);
+            parking_park_xhr.send();
+            parking_park_xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    $(".parkDisabled").remove();
+                    $(".parkParents").remove();
+                    $(".parkNormal").remove();
+                    response = JSON.parse(this.response);
+                    $(response).each(function (i, parkInfo) {
+                        $(parkInfo['ParkingLots']).each(function (i, parkMark) {
+                            // console.log(parkMark['Type'].includes('1'));
+                            targetPoint.push([parkMark['Y'], parkMark['X']]);
+                            targetDis.push(L.latLng(userlat, userlng).distanceTo(L.latLng(parkMark['Y'], parkMark['X'])));
+                            switch (parkMark['Type'].includes('1')) {
+                                case true:
+                                    // console.log('身障');
+                                    if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.6) {
+                                        var marker60 = L.marker([parkMark['Y'], parkMark['X']], { icon: park60 }).addTo(map);
+                                        inputInfo(parkMark, marker60);
+                                        parkingClass(marker60, 'parkDisabled');
+                                    } else if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.3) {
+                                        var marker30 = L.marker([parkMark['Y'], parkMark['X']], { icon: park30 }).addTo(map);
+                                        inputInfo(parkMark, marker30);
+                                        parkingClass(marker30, 'parkDisabled');
+                                    } else {
+                                        var marker0 = L.marker([parkMark['Y'], parkMark['X']], { icon: park0 }).addTo(map);
+                                        inputInfo(parkMark, marker0);
+                                        parkingClass(marker0, 'parkDisabled');
+                                    }
+                                    break;
+                                default:
+                                    switch (parkMark['Type'].includes('2')) {
+                                        case true:
+                                            // console.log('親子車位')
+                                            if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.6) {
+                                                var marker60 = L.marker([parkMark['Y'], parkMark['X']], { icon: park60 }).addTo(map);
+                                                inputInfo(parkMark, marker60);
+                                                parkingClass(marker60, 'parkParents');
+                                            } else if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.3) {
+                                                var marker30 = L.marker([parkMark['Y'], parkMark['X']], { icon: park30 }).addTo(map);
+                                                inputInfo(parkMark, marker30);
+                                                parkingClass(marker30, 'parkParents');
+                                            } else {
+                                                var marker0 = L.marker([parkMark['Y'], parkMark['X']], { icon: park0 }).addTo(map);
+                                                inputInfo(parkMark, marker0);
+                                                parkingClass(marker0, 'parkParents');
+                                            }
+                                            break;
+                                        default:
+                                            // console.log('無特殊車位')
+                                            if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.6) {
+                                                var marker60 = L.marker([parkMark['Y'], parkMark['X']], { icon: park60 }).addTo(map);
+                                                inputInfo(parkMark, marker60);
+                                                parkingClass(marker60, 'parkNormal');
+                                            } else if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.3) {
+                                                var marker30 = L.marker([parkMark['Y'], parkMark['X']], { icon: park30 }).addTo(map);
+                                                inputInfo(parkMark, marker30);
+                                                parkingClass(marker30, 'parkNormal');
+                                            } else {
+                                                var marker0 = L.marker([parkMark['Y'], parkMark['X']], { icon: park0 }).addTo(map);
+                                                inputInfo(parkMark, marker0);
+                                                parkingClass(marker0, 'parkNormal');
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
+                        })
+                    })
+                }
+            }
+        }
+
+
+
+
+    </script>
+
+    <script>
+        const $sidebar = $(".sidebar");
+        const $toggleSidebarButton = $("#toggle-sidebar");
+        let isSidebarOpen = true;
+        let isListMenuOpen = false;
+
+        $toggleSidebarButton.click(() => {
+            if (!isListMenuOpen) {
+                $sidebar.toggleClass("collapsed");
+                $toggleSidebarButton.toggleClass("collapsed");
+                isSidebarOpen = !isSidebarOpen;
+
+                $("body").css("overflow", isSidebarOpen ? "overflow" : "hidden");
+                $sidebar.css("overflow", isSidebarOpen ? "scroll" : "auto");
+
+                if (isSidebarOpen) {
+                    $sidebar.css("transition", "none");
+                    setTimeout(() => $sidebar.css("transition", "overflow 1.0s ease-in-out"), 0);
+                } else {
+                    $sidebar.css("transition", "");
+                }
+            }
+        });
+
+        function toggleListMenu() {
+            var listMenu = document.querySelector(".list-menu");
+            if (listMenu.style.display === "none") {
+                listMenu.style.display = "grid";
+                isListMenuOpen = true;
+            } else {
+                listMenu.style.display = "none";
+                isListMenuOpen = false;
+            }
+            $("body").css("overflow", isListMenuOpen ? "hidden" : "auto");
+        }
+
+        // 取得所有accordion的元素
+        const accordions = document.querySelectorAll('.accordion-button');
+
+        // 為每個accordion設置點擊事件監聽器
+        accordions.forEach(accordion => {
+            accordion.addEventListener('click', () => {
+                // 檢查sidebar是否已收合
+                const sidebar = document.querySelector('.sidebar');
+                const toggleSidebarButton = document.querySelector('#toggle-sidebar');
+                if (sidebar.classList.contains('collapsed')) {
+                    // 展開sidebar
+                    sidebar.classList.remove('collapsed');
+                    toggleSidebarButton.classList.remove('collapsed');
+                }
+            });
+        });
+
+
+        //當userPlaceBtn點擊時收合操作面板
+        const userPlaceBtn = document.getElementById('userPlaceBtn');
+        userPlaceBtn.addEventListener('click', () => {
+            // 檢查sidebar是否已收合
+            const sidebar = document.querySelector('.sidebar');
+            const toggleSidebarButton = document.querySelector('#toggle-sidebar');
+            if (!sidebar.classList.contains('collapsed')) {
+                // 展開sidebar
+                sidebar.classList.add('collapsed');
+                toggleSidebarButton.classList.add('collapsed');
+            }
+        })
+
+
+
+
+
+        // 控制對話框
+        function showDialog_info() {
+            document.getElementById("Dialog_info").showModal();
+        }
+
+        function closeDialog_info() {
+            document.getElementById("Dialog_info").close();
+        }
+
+        function showDialog_map() {
+            document.getElementById("Dialog_map").showModal();
+        }
+        function closeDialog_map() {
+            document.getElementById("Dialog_map").close();
+        }
+
+
+
+        //圖層切換icon
+        // 取得圖像元素
+        const carParkingImg = document.getElementById("car_parking_img");
+        const carStayImg = document.getElementById("car_stay_img");
+
+        // 為每個圖像添加點擊事件監聽器
+        carParkingImg.addEventListener("click", toggleCarParkingImg);
+        carStayImg.addEventListener("click", toggleCarStayImg);
+
+        function toggleCarParkingImg() {
+            // 切換選擇和未選擇圖像
+            if (!carParkingImg.src.includes("_select")) {
+                carParkingImg.src = "./assets/image/map_image/car_parking_select.jpg"
+            }
+            carStayImg.src = "./assets/image/map_image/car_stay.jpg";
+        }
+
+        function toggleCarStayImg() {
+            // 切換選擇和未選擇圖像
+            if (!carStayImg.src.includes("_select")) {
+                carStayImg.src = "./assets/image/map_image/car_stay_select.jpg"
+            }
+            carParkingImg.src = "./assets/image/map_image/car_parking.jpg";
+        }
+
+        // 手動更新清單的提示訊息
+        const redo = document.getElementById('redo');
+
+        redo.addEventListener('click', () => {
+            // 顯示訊息
+            const message = document.createElement('div');
+            message.innerText = '更新頁面';
+            message.style.position = 'fixed';
+            message.style.top = '50%';
+            message.style.left = '50%';
+            message.style.transform = 'translate(-50%, -50%)';
+            message.style.padding = '10px 20px';
+            message.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            message.style.color = '#fff';
+            message.style.borderRadius = '5px';
+            message.style.zIndex = 9999;
+            document.body.appendChild(message);
+
+            // 關閉訊息
+            setTimeout(() => {
+                message.remove();
+            }, 400);
+        });
+
+        // 檢查Local Storage中是否有名為"visited"的項目
+        if (!localStorage.getItem("visited")) {
+            // 如果"visited"不存在，將其設置為true並重新加載頁面
+            localStorage.setItem("visited", true);
+            // 在頁面加載後延遲兩秒後重新加載
+            setTimeout(function () {
+                window.location.reload();
+            }, 4000);
+        }
+        // 將按鈕的單擊事件處理程序設置為防止單擊後重新加載
+        // document.getElementById("reload-btn").addEventListener("click", function (event) {
+        //     event.preventDefault();
+        // });
+
+
+
+
+
+    </script>
+
+    <script>
+
+        // 取得台中停車場資訊
+        let taichung_parking_url = "https://motoretag.taichung.gov.tw/DataAPI/api/ParkingSpotListAPI";
+        let taichung_parking_xhr = new XMLHttpRequest();
+
+
+        // 定義 parkingLot 陣列在全域範圍
+        const parkingLot = [];
+
+        //台中停車場資訊
+        function fetchParkingData(url) {
+            return fetch(url)
+                .then(response => response.json())
+                .then(parking_data => {
+                    const parkingLot_info = {};
+                    parking_data.forEach(parking => {
+                        parking.ParkingLots.forEach(lot => {
+                            if (lot.AvailableCar >= 0 && lot.Position != null) {
+                                let distance = parseInt(L.latLng(userlat, userlng).distanceTo(L.latLng(lot.Y, lot.X)));
+                                let travTime = parseInt(distance / 30000 * 60);
+                                parkingLot_info[lot.ID] = {
+                                    id: lot.ID,
+                                    Position: lot.Position,
+                                    X: lot.X,
+                                    Y: lot.Y,
+                                    AvailableCar: lot.AvailableCar,
+                                    TotalCar: lot.TotalCar,
+                                    Type: lot.Type,
+                                    Notes: lot.Notes,
+                                    "ParkingType": 'ParkingLot',
+                                    Updatetime: lot.Updatetime,
+                                    distance: distance,
+                                    distanceKM: parseInt(distance / 1000),
+                                    distanceM: distance - (1000 * parseInt(distance / 1000)),
+                                    travelTime: travTime
+                                };
+                            }
+                        });
+                    });
+                    // 在這裡將 parkingLot_info 賦值給全域範圍的 parkingLot 陣列
+                    for (let key in parkingLot_info) {
+                        parkingLot.push(parkingLot_info[key]);
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+        // 在需要時呼叫fetchParkingData函數
+        fetchParkingData(taichung_parking_url)
+            .then(() => {
+                var parkingLotVue = new Vue({
+                    el: '#parking_lot_item',
+                    data: {
+                        parkingLot,
+                        activeCollapse: null, // 當前展開的折疊區塊ID
+                        dialog_fee_content: "" // 對話框內容
+                    },
+                    methods: {
+                        toggleCollapse: function (id) {
+                            // 如果點擊的是已經展開的選項，則關閉它
+                            if (this.activeCollapse === id) {
+                                this.activeCollapse = null;
+                            }
+                            // 如果點擊的是折疊的選項，則展開它
+                            else {
+                                this.activeCollapse = id;
+                            }
+                        },
+                        showDialog_fee(notes) {
+                            this.dialog_fee_content = notes;
+                            document.getElementById("Dialog_fee").showModal();
+                        },
+                        closeDialog_fee() {
+                            document.getElementById("Dialog_fee").close();
+                        },
+                        // 導航功能
+                        routing(y, x) {
+                            // 導向google導航網頁
+                            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + y + ',' + x;
+                            window.location.assign(url);
+                        },
+                        sortParkingLotByDistance() {
+                            this.parkingLot.sort((a, b) => {
+                                return a.distance - b.distance;
+                            });
+                        }
+                    },
+                    mounted() {
+                        this.sortParkingLotByDistance();
+                    }
+                })
+                // 在這裡使用parkingLot
+                // console.log(parkingLot);
+            })
+            .then(() => {
+                //停車場篩選用程式碼
+                var distance_select = document.getElementById("distance_select");
+                var special_select = document.getElementById("special_select");
+                var type_select = document.getElementById("type_select");
+                var parkingItems = document.querySelectorAll("#parking_lot_item .accordion-item");
+
+                distance_select.addEventListener("change", filterParkingItems);
+                special_select.addEventListener("change", filterParkingItems);
+                type_select.addEventListener("change", filterParkingItems);
+
+                function filterParkingItems() {
+                    var distanceValue = parseInt(distance_select.value);
+                    var specialValue = special_select.value;
+                    var typeValue = type_select.value;
+
+                    for (var i = 0; i < parkingItems.length; i++) {
+                        var parkingItem = parkingItems[i];
+                        var parkingName = parkingItem.querySelector(".parking_position").textContent;
+                        var parkingType = parkingLot.find(function (item) { return item.Position === parkingName; }).Type;
+                        var distance = parkingLot.find(function (item) { return item.Position === parkingName; }).distance;
+
+                        if (distance <= distanceValue &&
+                            (specialValue === "non_special" ||
+                                (specialValue === "disabled" && parkingType.includes(1)) ||
+                                (specialValue === "parent" && parkingType.includes(2))) &&
+                            (typeValue === "non_parking_type" ||
+                                (typeValue === "parking-lot" && parkingLot.find(function (item) { return item.Position === parkingName; }).ParkingType === "ParkingLot") ||
+                                (typeValue === "roadside-all" && parkingLot.find(function (item) { return item.Position === parkingName; }).ParkingType !== "ParkingLot") ||
+                                (typeValue === "roadside-empty" && parkingLot.find(function (item) { return item.Position === parkingName; }).ParkingType !== "ParkingLot" && parkingLot.find(function (item) { return item.Position === parkingName; }).TotalSpace > parkingLot.find(function (item) { return item.Position === parkingName; }).RemainingSpace))) {
+                            parkingItem.style.display = "block";
+                        } else {
+                            parkingItem.style.display = "none";
+                        }
+                    }
+                }
+            })
+            .then(() => {
+                // 流量表
+                var parkingLotT = parkingLot;
+                trafficData()
+                function trafficData() {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: `http://localhost:3000/select/traffic`,
+                            type: "GET"
+                        }).done(function (x) {
+                            const datafromT = JSON.parse(x);
+                            resolve(datafromT);
+
+
+                            //停車場篩選用程式碼
+                            var parkingItemsT = document.querySelectorAll("#parking_lot_item .accordion-item");
+
+                            var parkingTypeTArr = [];
+                            var parkingNameTArr = [];
+
+                            for (var i = 0; i < parkingItemsT.length; i++) {
+                                var parkingItemT = parkingItemsT[i];
+                                var parkingNameT = parkingItemT.querySelector(".parking_position").textContent;
+                                var parkingTypeT = parkingLotT.find(function (x) {
+                                    return x.Position === parkingNameT;
+                                });
+
+                                var parking = parkingItemT.querySelector(".parking_position").innerText;
+                                let categoriesP = parking.split('-');
+                                // console.log(categoriesP);
+                                for (let i = 0; i < datafromT.length; i++) {
+                                    let categoriesT = datafromT[i].parkingLot_name.split('-');
+                                    if (categoriesP[2] == categoriesT[2]) {
+                                        // 創建折線圖
+                                        var monday = JSON.parse(datafromT[i].monday);
+                                        var tuesday = JSON.parse(datafromT[i].tuesday);
+                                        var wednesday = JSON.parse(datafromT[i].wednesday);
+                                        var thursday = JSON.parse(datafromT[i].thursday);
+                                        var friday = JSON.parse(datafromT[i].friday);
+                                        var saturday = JSON.parse(datafromT[i].saturday);
+                                        var sunday = JSON.parse(datafromT[i].sunday);
+                                        var week = [sunday, monday, tuesday, wednesday, thursday, friday, saturday];
+                                        // console.log(week);
+
+                                        var dayOfWeek = new Date().getDay();
+                                        // console.log(dayOfWeek);
+
+                                        // 獲取當天對應的星期數據
+                                        var todayData = week[dayOfWeek];
+                                        var today = Object.values(todayData);
+                                        // console.log(today);
+
+                                        var labels = [];
+                                        for (var k = 0; k < 24; k++) {
+                                            labels.push(k + '時');
+                                        }
+
+                                        var canvas = parkingItemT.querySelector("#myChart");
+                                        var ctx = canvas.getContext('2d');
+
+                                        // 定義漸變顏色
+                                        var gradient = ctx.createLinearGradient(100, 50, 100, 300);
+                                        gradient.addColorStop(0, 'rgba(123, 229, 255 , 1)');
+                                        gradient.addColorStop(0.5, 'rgba(123, 169, 255, 0.5)');
+                                        gradient.addColorStop(1, 'rgba(192, 142, 241, 0.3)');
+
+                                        var chart = new Chart(ctx, {
+                                            type: 'line',
+                                            data: {
+                                                labels: labels,
+                                                datasets: [{
+                                                    label: '使用率',
+                                                    data: today,
+                                                    backgroundColor: gradient,
+                                                    borderColor: 'rgb(136, 226, 226)',
+                                                    fill: true, // 是否填滿色彩
+                                                    pointStyle: 'rect',
+                                                    pointRadius: 2,
+                                                    pointHoverRadius: 7,
+                                                    pointBackgroundColor: 'rgb(136, 226, 226)',
+                                                }]
+                                            },
+                                            options: {
+                                                layout: {
+                                                    padding: { left: 20, right: 0, top: 20, bottom: 30 },
+                                                },
+                                                tooltips: {
+                                                    callbacks: {
+                                                        label: function (tooltipItem, data) {
+                                                            return "使用率: " + tooltipItem.yLabel + "%";
+                                                        }
+                                                    }
+                                                },
+                                                legend: {
+                                                    display: false,         // 關閉顏色框
+                                                },
+                                                scales: {
+                                                    xAxes: [{
+                                                        gridLines: {
+                                                            display: true, // X軸 線條不顯示 
+                                                        },
+                                                        ticks: {
+                                                            fontColor: "#8b8b8b", // X軸 文字顏色
+                                                            maxTicksLimit: 4,
+                                                            autoSkip: true,
+                                                            maxRotation: 0,
+                                                            minRotation: 0,
+                                                            autoSkipPadding: 15
+                                                        },
+                                                    }],
+                                                    yAxes: [{
+                                                        gridLines: {
+                                                            display: true,
+
+                                                        },
+                                                        position: 'right',
+                                                        ticks: {
+                                                            fontColor: "#8b8b8b", // Y軸 文字顏色 
+                                                            maxTicksLimit: 6,
+                                                            beginAtZero: true,
+                                                            min: 0,
+                                                            max: 100,
+                                                            stepSize: 10,
+                                                            callback: function (value) {
+                                                                return value + "%";
+                                                            }
+                                                        }
+                                                    }]
+                                                }
+                                            }
+                                        })
+
+                                    }
+                                }
+
+                            }
+                        }
+                        )
+
+                    })
+                }
+            })
+
+
+
+
+
+        //台中路邊停車格資訊
+
+        // 定義 parkingRoad 陣列在全域範圍
+        const parkingRoad = [];
+        const now = new Date();
+        now.setHours(now.getHours() + 8);
+
+        // 創建一個函數，用於從 CSV 字串中解析 JSON 物件
+        function parseTaichungRoadInfo(csvString) {
+            return csvString.split('\r\n').map(row => {
+                let distance, travTime
+                const values = row.split(',');
+                if (values[10] !== undefined) {
+                    distance = parseInt(L.latLng(userlat, userlng).distanceTo(L.latLng(values[10], values[9])));
+                    travTime = parseInt(distance / 30000 * 60);
+                } else {
+                    distance = null;
+                    travTime = null;
+                }
+                return {
+                    id: values[0],
+                    road_id: values[2],
+                    rdname: values[3],
+                    se_road: values[4],
+                    ceiiId: values[5],
+                    paycash: values[7],
+                    PS_type: values[8],
+                    TWD97_X: values[9],
+                    TWD97_Y: values[10],
+                    status: values[11],
+                    distance: distance,
+                    distanceKM: parseInt(distance / 1000),
+                    distanceM: distance - (1000 * parseInt(distance / 1000)),
+                    travelTime: travTime,
+                    "ParkingType": 'ParkingRoad',
+                    Updatetime: now.toISOString().replace('T', ' ').substr(0, 19)
+                };
+            });
+        }
+
+        // 調用 parseTaichungRoadInfo 函數來解析 CSV 字串並取得我們需要的屬性
+        fetch('./assets/image/map_image/taichung_road_info/taichung_road_parking_info.csv')
+            .then(response => response.text())
+            .then(csvString => {
+                const taichung_road_info = parseTaichungRoadInfo(csvString);
+                for (let i = 0; i < taichung_road_info.length; i++) { //taichung_road_info.length
+                    parkingRoad.push(taichung_road_info[i]);
+                }
+
+                var parkingRoadVue = new Vue({
+                    el: '#parking_road_item',
+                    data: {
+                        parkingRoad,
+                        activeCollapse: null,
+                        dialog_roadfee_content: "" // 對話框內容
+                    },
+                    methods: {
+                        toggleCollapse: function (id) {
+                            // 如果點擊的是已經展開的選項，則關閉它
+                            if (this.activeCollapse === id) {
+                                this.activeCollapse = null;
+                            }
+                            // 如果點擊的是折疊的選項，則展開它
+                            else {
+                                this.activeCollapse = id;
+                            }
+                        },
+                        showDialog_roadfee(paycash) {
+                            this.dialog_roadfee_content = paycash;
+                            document.getElementById("Dialog_road_fee").showModal();
+                        },
+                        closeDialog_roadfee() {
+                            document.getElementById("Dialog_road_fee").close();
+                        },
+                        routing(y, x) {
+                            // 導向google導航網頁
+                            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + y + ',' + x;
+                            window.location.assign(url);
+                        },
+                        sortParkingRoadByDistance() {
+                            this.parkingRoad.sort((a, b) => {
+                                return a.distance - b.distance;
+                            });
+                        }
+                    },
+                    mounted() {
+                        this.sortParkingRoadByDistance();
+                    }
+                })
+
+                // console.log(parkingRoad);
+                // 在這裡使用 parkingRoad
+            })
+            .catch(error => console.error(error))
+
+            .then(() => {
+                //停車格篩選用程式碼
+                var distance_selectR = document.getElementById("distance_select");
+                distance_selectR.addEventListener("change", filterDistanceR);
+
+                function filterDistanceR() {
+                    var parkingItems = document.querySelectorAll("#parking_road_item .accordion-item");
+                    var valueD = distance_selectR.value;
+
+                    parkingItems.forEach(item => {
+                        var parkingRD = item.querySelector(".distanceR");
+                        var distanceR = parseInt(parkingRD.textContent);
+
+                        var specialSelect = document.getElementById("special_select");
+                        var valueS = specialSelect.value;
+                        var type_selectR = document.getElementById("type_select");
+                        var valueT = type_selectR.value;
+
+                        if ((valueD !== "" && parseInt(valueD) < distanceR) ||
+                            (valueS === "disabled" && item.querySelector("#handicapped") === null) ||
+                            (valueS === "parent" && item.querySelector("#Parent_Child") === null) ||
+                            (valueT === "parking-lot") ||
+                            (valueT === "roadside-empty" && item.querySelector("#status_light") == null)) {
+                            item.style.display = "none";
+                        } else {
+                            item.style.display = "block";
+                        }
+                    });
+                }
+
+                var specialSelect = document.getElementById("special_select");
+                specialSelect.addEventListener("change", filterDistanceR);
+
+                var type_selectR = document.getElementById("type_select");
+                type_selectR.addEventListener("change", filterDistanceR);
+
+            })
+
+
+
+    </script>
+
+
+    <!-- 登入後判斷頁面呈現與切換 -->
+    <script>
+        // 假設 memberID 存在於 localStorage 中
+        var memberID = localStorage.getItem('memberID');
+        var memberAc = localStorage.getItem('member_ac');
+
+        var loginHtml = `
+                <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Trade_record.html">交易紀錄</a>
+            </div>
+
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Car_Licence_add.html">新增車牌</a>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Gold_flow_home.html">會員中心</a>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Payment.html">立即繳費</a>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./NotificationCenter.html">通知中心</a>
+            </div>
+            <div id="logIO" class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist clearLocalStroage" type="button" href="login.html">登出</a>
+            </div>
+        `;
+
+
+
+
+        var SignOutHtml = `   
+        <div class="d-grid  w-100" style="z-index: 99;">
+            
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="register.html">註冊</a>
+            </div>
+            <div id="logIO" class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="login.html">登入</a>
+            </div>
+        `
+        if (memberID) {
+            // 若 memberID 存在，表示已登入，顯示登出標籤，隱藏登入標籤
+            $('.list-menu').html(loginHtml);
+        } else {
+            // 若 memberID 不存在，表示未登入，顯示登入標籤，隱藏登出標籤
+            $('.list-menu').html(SignOutHtml);
+        }
+
+        $('.clearLocalStroage').on('click', function () {
+            localStorage.removeItem('memberID');
+        });
+
+
+    </script>
+</body>
+
+</html>

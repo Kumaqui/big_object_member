@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金流主頁</title>
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="./assets/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        .member_img_css {
+            transform: scale(1.2);
+            filter: blur(4px)
+        }
+
+        .bg_black_member {
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        select[class="license"] {
+            border: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .a_payment img:hover {
+            transform: scale(1.5);
+        }
+
+        .a_payment img:active {
+            transform: scale(1.03);
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+
+        .color_gary {
+            color: rgb(126, 123, 123);
+        }
+
+        .border_gray {
+            border: 1px rgb(126, 123, 123) solid;
+        }
+
+        .dis_flex_column_center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_column_j_center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .dis_flex_row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dis_flex_row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .dis_flex_row_j_space_around {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .border_none {
+            border: none;
+            background-color: transparent;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .bg_black_member_css {
+            border: solid 5px #0069B4;
+            transform: scale(1.2);
+            background-color: white;
+        }
+
+        .bg_blue {
+            background-color: #0069B4;
+        }
+
+        .color_white {
+            color: white;
+        }
+
+        .btn_i {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .dis_flex_row_j_center {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .color_blue {
+            color: #0069B4;
+        }
+
+        .bg_white {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg_black_member hidden">
+
+        <div class="row bg_white ms-3 me-3" style="position: fixed; top:30%; padding: 10px;">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car1.png" alt=""></div>
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car2.png" alt=""></div>
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car3.png" alt=""></div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car4.png" alt=""></div>
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car5.png" alt=""></div>
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car6.png" alt=""></div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car7.png" alt=""></div>
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car8.png" alt=""></div>
+                    <div class="col-4 dis_flex_center"> <img style="width: 90px; height:90px"
+                            src="./assets/image/Gold_Flow_image/car9.png" alt=""></div>
+                </div>
+            </div>
+            <div class="col-12 mt-4">
+                <div class="row">
+                    <div class="col-6 dis_flex_center"><button class="w-100 btn btn-primary cancel">
+                            <h3 class="mt-2"><b>取消</b></h3>
+                        </button></div>
+                    <div class="col-6 dis_flex_center"><button class="w-100 btn btn-primary img_sure">
+                            <h3 class="mt-2"><b>確定</b></h3>
+                        </button></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="bg_blue">
+        <div style="position: absolute; left:5px">
+            <button class="border_none btn_i G_index">
+                <i class="fa fa-angle-left"></i>
+            </button>
+        </div>
+        <div class="dis_flex_row_j_center pt-1">
+            <h2 class="color_white">
+                <b>會員中心</b>
+            </h2>
+        </div>
+    </div>
+    <div class=" container dis_flex_row" style="margin-top: 20px;">
+        <img style="width: 90px;" class="member_img ">
+        <div style="position: absolute;left:15px; top:90px" class="photo_change hidden">
+            <button class="border_none photo_change_button">
+                <h3><b>更改頭像</b></h3>
+            </button>
+        </div>
+        <div class="dis_flex_column_j_center ps-2">
+            <div>
+                <h2 class="color_blue name"><b></b> </h2>
+            </div>
+            <div>
+                <h3 class="color_blue ac"><b></b> </h3>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="dis_flex_center container-fluid">
+        <div class="row border_gray container" style=" border-radius: 7px;">
+            <div class="col-12 " style="padding-top: 10px;">
+                <h3 class="color_gary"><b>Car Parking 帳戶</b> </h3>
+            </div>
+            <div class="col-12 ">
+                <div class="dis_flex_center ">
+                    <h2 class="member_money">
+                        <b></b>
+                    </h2>
+                </div>
+
+                <div style="position: relative;bottom:35%;  margin-top: -30px;">
+                    <button class="border_none wallet " style="float: right;">
+                        <i class="fa fa-chevron-circle-right" style="font-size: 24px; color: #0069B4;"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <hr class="color_gary">
+    <div class="dis_flex_column_center">
+        <h3 class="color_blue"><b>車牌號碼</b> </h3>
+        <div class="license">
+
+        </div>
+    </div>
+    <div class="modal_license">
+
+    </div>
+    <!-- 新增車牌 -->
+    <div class="dis_flex_row  mt-4" style="justify-content: center;">
+        <div>
+            <button class="license_update border_none">
+                <img style=" width:150px;" src="./assets/image/Gold_Flow_image/pay-20.png" alt="">
+            </button>
+        </div>
+    </div>
+    <hr class="color_gary ">
+    <br>
+    <div class="dis_flex_row_j_space_around a_payment">
+        <div class=" dis_flex_column_center">
+            <button class="border_none payment" style="padding-top: 13px; ">
+                <img style="width: 60px;" src="./assets/image/Gold_Flow_image/pay-02.png" alt="">
+            </button>
+            <h4 class="color_blue" style=" margin-top: 20px;"><b>路邊停車費</b> </h4>
+
+        </div>
+        <div class="dis_flex_column_center">
+            <button class="border_none payment">
+                <img style="width: 60px;" src="./assets/image/Gold_Flow_image/pay-03.png" alt="">
+            </button>
+            <h4 class="color_blue " style=" margin-top: 25px;"><b>公有停車場</b> </h4>
+        </div>
+        <div class="dis_flex_column_center">
+            <button class="border_none Trade_record">
+                <img style="width: 45px;" src="./assets/image/Gold_Flow_image/pay-04.png" alt="">
+            </button>
+            <h4 class="color_blue " style=" margin-top: 20px;"><b>交易紀錄</b> </h4>
+        </div>
+        <div class="dis_flex_column_center">
+            <button class="border_none wallet">
+                <img style="width: 45px;" src="./assets/image/Gold_Flow_image/pay-05.png" alt="">
+            </button>
+            <h4 class="color_blue " style="margin-top: 18px;"><b>線上錢包</b> </h4>
+        </div>
+    </div>
+
+
+
+    <script>
+        var id = localStorage.getItem("memberID")
+        //  判定資料庫是否有image 沒有則放預設圖片
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/select/member",
+            data: { id },
+        }).done(function (e) {
+            var dataServer = JSON.parse(e);
+            // console.log(dataServer)
+            var member_photo = dataServer[0].member_image
+            // console.log(member_photo)
+            if (member_photo) {
+                $(".member_img").attr("src", member_photo)
+            } else {
+                $(".member_img").attr("src", "./assets/image/Gold_Flow_image/member.jpg")
+            }
+        })
+
+
+        // 判定登入
+        var member_ac = localStorage.getItem("member_ac")
+        if (!member_ac) {
+            window.location = "./login.html"
+        }
+    </script>
+
+    <script>
+
+        // console.log(id)
+
+        // 更改頭像
+        $(".member_img").mousedown(function () {
+            $(".member_img").addClass("member_img_css")
+            $(".photo_change").removeClass("hidden")
+        })
+        $(".photo_change_button").on("click", function () {
+            $(".bg_black_member").removeClass("hidden")
+        })
+
+        $(".bg_black_member img").on("click", function () {
+            $(".bg_black_member img").removeClass("bg_black_member_css");
+            $(this).addClass("bg_black_member_css")
+        })
+
+        $(".cancel").on("click", function () {
+            $(".bg_black_member").addClass("hidden")
+            $(".member_img").removeClass("member_img_css")
+            $(".photo_change").addClass("hidden")
+        })
+
+        // $(".member_img").attr("src", "./assets/image/Gold_Flow_image/member.jpg")
+
+        $(".img_sure").on("click", function () {
+            $(".bg_black_member_css").each(function () {
+                var img_src_attr = $(this).attr("src")
+                //  console.log(img_src_attr)
+                $.ajax({
+                    type: "PUT",
+                    url: 'http://localhost:3000/update/memberimg',
+                    data: {
+                        id: id,
+                        image: img_src_attr
+                    }
+                })
+                sessionStorage.setItem("member_src", img_src_attr)
+                $(".member_img").attr("src", img_src_attr)
+                $(".photo_change").addClass("hidden")
+                $(".member_img").removeClass("member_img_css")
+                $(".bg_black_member").addClass("hidden")
+            })
+            // console.log("1234")
+        })
+
+        // Car Parking 帳戶 
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/select/member",
+            data: { id }
+        }).done(
+            function (e) {
+                var dataServer = JSON.parse(e);
+                var money = dataServer[0].member_money;
+                var name = dataServer[0].member_name;
+                var ac = dataServer[0].member_ac;
+                // console.log(money)
+                $(".member_money").append(`${money}元`).css("font-weight", "bold")
+                $(".name").append(name).css("font-weight", "bold")
+                $(".ac").append(ac).css("font-weight", "bold")
+            }
+        )
+        $.ajax({
+            url: `http://localhost:3000/select/license/${id}`,
+            type: "GET"
+        }).done(function (x) {
+            var datafromS = JSON.parse(x);
+            // console.log(datafromS)
+
+            for (i = 0; i < datafromS.length; i++) {
+                $('.license').append(
+                    `
+                    <div class="dis_flex_center mt-2">
+                    <div class="pt-3 ps-4 dis_flex_center" style=" width:180px; height:80px; background-image: url('./assets/image/Gold_Flow_image/pay-22.png');background-size:180px 80px;">
+                   <h2><b> ${datafromS[i].license}<b> </h3>
+                    <button data-bs-toggle="modal" data-bs-target="#exampleModal${datafromS[i].license}" class=" border_none license_delete" style="position: relative; top:-34px;right:-10px""> 
+                        <i class="fa fa-times-circle color_blue" style="font-size:24px;"></i>
+                    </button>
+                </div >
+                </div>
+                `
+                )
+                $(".modal_license").append(
+                    `
+    <div class="modal fade" id="exampleModal${datafromS[i].license}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h2 class="modal-title color_blue" id="exampleModalLabel"><b>是否刪除該車牌</b> </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   <h3><b>刪除後需重新新增</b> </h3> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" data-bs-license="${datafromS[i].license}" class="btn btn-primary" onclick='license_delete("${datafromS[i].license}")'>確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                    `
+                )
+            }
+        })
+        // onclick="license_delete('${datafromS[i].license}')"
+        function license_delete(x) {
+            // console.log(x)
+            // console.log("12")
+            deletelicense(x)
+        }
+        function deletelicense(x) {
+            // console.log(x)
+            $.ajax({
+                url: `http://localhost:3000/delete/license`,
+                type: "post",
+                data: {
+                    license: x
+                }
+            }).done(function(){
+                location.reload();
+            })
+        }
+
+
+        $(".wallet").on("click", function () {
+            window.location = "./Wallet.html"
+        })
+
+        $(".license_update").on("click", function () {
+            window.location = "./Car_Licence_add.html"
+        })
+        $(".license_delete").on("click", function () {
+            window.location = "./Car_Licence_choose.html"
+        })
+
+        $(".payment").on("click", function () {
+            window.location = "./Payment.html"
+        })
+        $(".Trade_record").on("click", function () {
+            window.location = "./Trade_record.html"
+        })
+        $(".G_index").on("click", function () {
+            window.location = "./index.html"
+        })
+    </script>
+</body>
+
+</html>

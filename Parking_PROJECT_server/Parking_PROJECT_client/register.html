@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>register</title>
+    <!-- bootstrap5-->
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+
+    <!-- icon -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" />
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script> -->
+
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+
+    <!-- css -->
+    <link rel="stylesheet" href="./assets/css/member/login_signup.css">
+
+</head>
+
+<body>
+    <!--表單內容-->
+    <form style="margin: auto; width: 100%;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-center" style="font-size: 32px; margin-top: 10px;"><b>會員註冊</b></p>
+                </div>
+            </div>
+            <div class="row form-group justify-content-center">
+                <div class="col-12">
+                    <label class="accPwdWord"><span>*</span> 名稱</label>
+                    <input name="name" id="userAccount" type="text" class="border border-1 rounded-2  mb-3 accPwd "
+                        placeholder="User001" required="required" minlength="2">
+                </div>
+            </div>
+
+            <div class="row form-group justify-content-center">
+                <div class="col-12 mb-3">
+                    <label class="accPwdWord"><span>*</span> 會員帳號</label>
+                    <input name="ac" id="userAccount" type="text" class="border border-1 rounded-2 accPwd"
+                        placeholder="User001" required="required" minlength="2">
+                    <p class="fz-3 fw-bold" id="acErrorMessage" style="margin-left: 25%; width: 50%;">
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="row form-group justify-content-center">
+                <div class="col-12 mb-3">
+                    <label class="accPwdWord"><span>*</span> 聯絡手機</label>
+                    <input name="phone" id="userPhone" class="border border-1 rounded-2   accPwd" type="tel"
+                        placeholder="09xxxxxxxx" required="required" maxlength="11" pattern="09+[0-9]{8}"
+                        oninput="setCustomValidity('');" oninvalid="setCustomValidity('手機號碼格式錯誤，須為09開頭。');">
+                    <p class="fz-3 fw-bold" id="phoneErrorMessage" style="margin-left: 25%; width: 50%;">
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-12 mb-3">
+                    <label class="accPwdWord"><span>*</span> 聯絡信箱</label>
+                    <input name="email" id="userEmail" class="border border-1 rounded-2  accPwd" type="email"
+                        placeholder="a@g.xx" required="required" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                    <p class="fz-3 fw-bold" id="emailErrorMessage" style="margin-left: 25%; width: 50%;">
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-center">
+                <div class="col-12 mb-3">
+                    <label class="accPwdWord"><span>*</span> 設定登入密碼</label>
+                    <input type="password" name="pass" id="userPassword" class="border border-1 rounded-2 accPwd"
+                        minlength="6" placeholder="Pwd0dd001" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{6,}$"
+                        required>
+                    <i id="checkEye" class="fas fa-eye" style="width: 0;"></i>
+                    <p class="fz-3 fw-bold" id="passErrorMessage" style="margin-left: 25%; width: 50%;">
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-12 mb-4">
+                    <label class="accPwdWord"><span>*</span> 確認登入密碼</label>
+                    <input id="userPassword1" class="border border-1 rounded-2 accPwd" placeholder="Pwd0dd001"
+                        type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{6,}$" required
+                        oninput="setCustomValidity('');"
+                        onchange="if(document.getElementById('userPassword').value != document.getElementById('userPassword1').value){setCustomValidity('密碼不符合');}">
+                    <i id="checkEye1" class="fas fa-eye " style="width: 0;"></i>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-center">
+                <div class="col-12 placeCenter mb-4">
+                    <button type="button" id="registerBtn"
+                        style="width: 50%; height: 35px; background-color: #34A853; color: white;"
+                        class="btn btn-block placeCenter"><span style="font-size: 18px;"><b>註冊</b> </span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+    <!-- 在網頁的<body>標籤內新增以下程式碼 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close text-end">&times;</span>
+            <h5 id="modal-message" class="fw-bold text-center"></h5>
+        </div>
+    </div>
+
+
+    <script>
+        // 密碼顯示/隱藏
+        $("#checkEye").click(function () {
+            if ($(this).hasClass('fa-eye')) {
+                $("#userPassword").attr('type', 'text');
+            } else {
+                $("#userPassword").attr('type', 'password');
+            }
+            $(this).toggleClass('fa-eye').toggleClass('fa-eye-slash');
+        });
+
+        $("#checkEye1").click(function () {
+            if ($(this).hasClass('fa-eye')) {
+                $("#userPassword1").attr('type', 'text');
+            } else {
+                $("#userPassword1").attr('type', 'password');
+            }
+            $(this).toggleClass('fa-eye').toggleClass('fa-eye-slash');
+        });
+
+
+    </script>
+
+    <script>
+        $("#registerBtn").on('click', function () {
+            // 取得表單輸入值
+            var name = $("input[name=name]").val();
+            var ac = $("input[name=ac]").val();
+            var pass = $("input[name=pass]").val();
+            var phone = $("input[name=phone]").val();
+            var email = $("input[name=email]").val();
+            var money = '0';
+
+            // 正規表達式
+            var acPattern = /^[a-zA-Z0-9]{6,}$/;
+            var phonePattern = /^09\d{8}$/;
+            var emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+            var passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+
+            // 驗證
+            if (!acPattern.test(ac)) {
+                $("#acErrorMessage").text("帳號無效，帳號必須由至少6個英文或數字組成");
+                $("#acErrorMessage").addClass("error");
+            } else {
+                $("#acErrorMessage").text("");
+
+            }
+
+            if (!phonePattern.test(phone)) {
+                $("#phoneErrorMessage").text("手機號碼格式錯誤，須為09開頭");
+                $("#phoneErrorMessage").addClass("error");
+            } else {
+                $("#phoneErrorMessage").text("");
+
+            }
+
+            if (!emailPattern.test(email)) {
+                $("#emailErrorMessage").text("請輸入有效的郵件地址");
+                $("#emailErrorMessage").addClass("error");
+            } else {
+                $("#emailErrorMessage").text("");
+
+            }
+
+            if (!passPattern.test(pass)) {
+                $("#passErrorMessage").text("密碼至少 6 個字元，且包含英文大小寫和數字");
+                $("#passErrorMessage").addClass("error");
+                return
+            } else {
+                $("#passErrorMessage").text("");
+
+            }
+
+
+            // 傳送 AJAX 請求
+            var formData = {
+                name: name,
+                ac: ac,
+                pass: pass,
+                phone: phone,
+                email: email,
+                money: money
+            };
+
+            $.ajax({
+                type: 'GET',
+                url: `http://localhost:3000/select/member/${ac}`,
+            }).done(function (x) {
+                x = JSON.parse(x)
+                var y = x[0] || { member_ac: "無" }
+                if (ac == y.member_ac) {
+                    
+                    var modal = document.getElementById("modal");
+                    var modalMessage = document.getElementById("modal-message");
+                    modal.style.display = "block";
+                    modalMessage.textContent = "此帳號已經有人使用！";
+
+                    var closeBtn = document.getElementsByClassName("close")[0];
+                    closeBtn.onclick = function () {
+                        modal.style.display = "none";
+                        window.location.href = 'register.html';
+                    }
+
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:3000/insert/member',
+                        data: formData
+                    })
+
+                    modal = document.getElementById("modal");
+                    modalMessage = document.getElementById("modal-message");
+                    modal.style.display = "block";
+                    modalMessage.textContent = "註冊成功！";
+                    // 設置關閉按鈕的點擊事件
+                    var closeBtn = document.getElementsByClassName("close")[0];
+                    closeBtn.onclick = function () {
+                        modal.style.display = "none";
+                        window.location.href = 'login.html';
+                    }
+
+                }
+            })
+        });
+
+    </script>
+
+
+</body>

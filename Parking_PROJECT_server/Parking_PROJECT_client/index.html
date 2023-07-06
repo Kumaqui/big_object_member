@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首頁</title>
+
+    <!-- css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <!-- design -->
+    <link rel="stylesheet" href="assets/css/index/design.css">
+
+    <!-- ncBtn -->
+    <link rel="stylesheet" href="assets/css/index/ncBtn.css">
+
+    <!-- animate -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+    <!-- map -->
+    <script src="./assets/js/map_control_js/leaflet/leaflet.js"></script>
+    <link rel="stylesheet" href="./assets/css/map_control_css/leaflet/leaflet.css" />
+
+    <!-- MarkerCluster -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <!-- icon -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+</head>
+
+<body>
+    <button onclick="topFunction()" id="myBtnTop" class="btn btn-outline-primary shadow">
+        <i class="bi bi-arrow-up-short fs-2"></i>
+    </button>
+
+    <!-- 導覽列 -->
+    <nav class="navbar">
+        <div class="container">
+            <a class="" href="#">
+                <img src="./assets/image/index/logo-yellow.png" width="150px">
+            </a>
+
+            <div class="navbar-nav">
+                <!-- 登入前 -->
+                <!-- <a class="nav-link login me-3" href="register.html">註冊</a>
+                <a class="nav-link login " href="login.html">登入</a> -->
+
+                <!-- 登入後 -->
+                <!-- <a class="nav-link logout me-3" href="#"><i class="bi bi-app-indicator"></i></a>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle nav-link logout text-white" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" id="userhello">
+                    </button>
+                    <ul class="dropdown-menu" style="">
+                        <li><a class="dropdown-item logout" href="#">繳費紀錄</a></li>
+                        <li><a class="dropdown-item logout clearLocalStroage" href="login.html">登出</a></li>
+                    </ul>
+                </div> -->
+
+                <!-- 通知變數後續調整 : https://icons.getbootstrap.com/icons/app-indicator/ -->
+            </div>
+        </div>
+    </nav>
+
+   <!-- 通知中心內容 -->
+    <!-- 關閉內容時 點擊ncContainer外的空間 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="overlay"></div>
+        </div>
+    </div>
+
+    <!-- 內容 -->
+    <div class="ncContainer border rounded-3">
+        <div class="row NCtopBgc mb-3" style="margin-top: -10px;">
+            <div class="col-12">
+                <p class="NCtopWord NCplaceCenter">通知中心</p>
+            </div>
+        </div>
+
+        <div class="row" style="height: 50px;">
+            <div class="col-12 mb-3 button-container">
+                <div class="button-wrapper">
+                    <button type="button" id="allPage" onclick="btnAll()"
+                        class="border border-light me-1 Classification">全部</button>
+                    <button type="button" onclick="btnAdd()" class="border border-light me-1 Classification">儲值</button>
+                    <button type="button" onclick="btnMin()" class="border border-light me-1 Classification">提領</button>
+                    <button type="button" onclick="btnAready()"
+                        class="border border-light me-1 Classification">已繳費</button>
+                    <button type="button" onclick="btnNo()" class="border border-light Classification">未繳費</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="mergedArray_fromS"></div>
+                <div class="row">
+                    <div class="col-12 ncCount">
+                        <p class="NCplaceCenter"><b>無通知</b></p>
+                        <div class="row">
+                            <div class="col-12 NCplaceCenter">
+                                <i class='far fa-frown'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="mergedArray_data"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- 主視覺 -->
+    <section class="bg-blue container-fluid py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-6 animate__animated animate__bounceInLeft">
+                    <h1 class="pt-3 text-white">用最快速度找到停車位!</h1>
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" class="form-control" id="searchPlace" placeholder="快速查找">
+                    </div>
+                    <div class="my-3"></div>
+                    <button type="button" id="targetBtn" class="btn btn-outline-light">最近停車位！</button>
+
+                </div>
+                <div class="col-12 col-md-6">
+                    <img src="./assets/image/index/index-01.png"
+                        class="img-fluid animate__animated animate__bounceInRight">
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 四大功能介紹 -->
+    <section class="container py-4 animate__animated animate__fadeInUp">
+        <div class="row">
+            <div class="col-12 ">
+                <h1 class="text-center">快速找停車，Car Parking都GO付</h1>
+                <h6 class="text-center">免嗶免掃免下車免感應 ， 一切App付款輕鬆達成 !</h6>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        <div class="card text-bg-white mb-3 shadow-sm" style="max-width: 18rem;">
+                            <div class="p-3 text-center">
+                                <img src="./assets/image/index/index-02.png" class="img-fluid">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title text-center">停車流量</h4>
+                                <h6 class="card-text text-center">預先判斷時間與空位</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card text-bg-white mb-3 shadow-sm" style="max-width: 18rem;">
+                            <div class="p-3 text-center">
+                                <img src="./assets/image/index/index-05.png" class="img-fluid">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title text-center">停車場</h4>
+                                <h6 class="card-text text-center">選擇各家停車場類型</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card text-bg-white mb-3 shadow-sm" style="max-width: 18rem;">
+                            <div class="p-3 text-center">
+                                <img src="./assets/image/index/index-04.png" class="img-fluid">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title text-center">路邊停車</h4>
+                                <h6 class="card-text text-center">即時空位就是你</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card text-bg-white mb-3 shadow-sm" style="max-width: 18rem;">
+                            <div class="p-3 text-center">
+                                <img src="./assets/image/index/index-03.png" class="img-fluid">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title text-center">車宿地點</h4>
+                                <h6 class="card-text text-center">野外露宿更簡單</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 手機樣式簡介 -->
+    <section class="container-fluid bg-light-subtle py-5 ">
+        <div class="container">
+            <div class="row">
+                <div class="rounded-4 shadow-sm bg-white py-5 position-relative mx-md-auto" style="max-width: 800px;">
+                    <h1 class="text-center mb-4">開到哪，付到哪</h1>
+                    <img src="./assets/image/index/index-07.png" class="bg-app_a" alt="">
+                    <div class="appText_a">
+                        <div>
+                            <h3>支援付款場合</h3>
+                            <p class="mb-2">Car Parking 都任你付 ! 點擊下方查詢支援場站 。</p>
+                            <button type="button" class="btn btn-sm btn-outline-primary payment">停車繳費</button>
+                        </div>
+                        <div class="mt-4">
+                            <h3>汽機車停車費</h3>
+                            <p>透過 Car Parking 付 ， 自動繳費功能，縣市路邊停車費 ， 每日即時自動繳清 ， 再也免跑超商。</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 手機樣式簡介2 -->
+    <section class="container-fluid py-5 px-0 mt-5 object-fit-scale ">
+        <div class="bg-yellow py-5 ">
+            <div class="position-relative mx-md-auto" style="max-width: 900px;">
+
+                <img src="./assets/image/index/index-08.png" class="bg-app_b">
+                <div class="container px-5 appText_b">
+                    <h1>綁定車牌<br>立即上路使用 Car Parking !</h1>
+                    <button type="button" class="btn btn-dark mobile_v13">立即使用 !</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 輕鬆設定 ， 即可出發 -->
+    <section class="container-fluid bg-light-subtle py-5 ">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <h1 class="text-center">輕鬆設定 ， 即可出發</h1>
+                <h6 class="text-center">在欲使用 App 通路設定好車牌及錢包 ， 開始使用 。 </h6>
+
+                <div class="col-12 col-md-3 text-center d-flex flex-column align-items-center mx-sm-3 mt-3">
+                    <div class="rounded-3 shadow-sm bg-white py-5 text-center d-flex align-items-center justify-content-center "
+                        style="width: 200px;height:200px">
+                        <img src="./assets/image/index/index-09.png" class="" alt="">
+                    </div>
+                    <div style="width: 200px;">
+                        <h4 class="mt-2 text-center">設定車牌</h4>
+                        <h6 class=" text-center">可以增多組汽 、 機車車牌來使
+                            用 Car Parking 付 。
+                            <br>
+                            <a href="./Car_Licence_add.html">如何設定</a>
+                        </h6>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3 text-center d-flex flex-column align-items-center mx-sm-3 mt-3">
+                    <div class="rounded-3 shadow-sm bg-white py-5 text-center  d-flex align-items-center justify-content-center"
+                        style="width: 200px;height:200px ;">
+                        <img src="./assets/image/index/index-10.png" class="" alt="">
+                    </div>
+                    <div style="width: 200px;">
+                        <h4 class="mt-2 text-center">設定錢包</h4>
+                        <h6 class=" text-center">可以儲值錢包，線上方便繳費
+                            <br>
+                            <a href="./Wallet.html">如何設定</a>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 地圖嵌入 -->
+    <section class="container py-5">
+        <h1 class="text-center">您在這裡</h1>
+        <!-- google地圖嵌入 -->
+        <!-- <div class="d-flex flex-column align-items-center">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3615.7700089753916!2d121.47339331045227!3d25.007929839249265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a90acfc275d5%3A0x68e97873e54484b6!2z5Zib5Zi75ZmgIG9oIeunm-yeiOuLrS3pn5PlvI_ngrjpm54!5e0!3m2!1szh-TW!2stw!4v1681806250173!5m2!1szh-TW!2stw"
+                width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div> -->
+
+        <!-- userMap -->
+        <a href="./mobile_v13.html">
+            <div id="map"></div>
+        </a>
+
+    </section>
+
+    <footer class="bg-black ">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-sm-6 col-12 mb-4 text-center">
+                    <img src="./assets/image/index/index-12.png" alt="" class="img-fluid">
+                </div>
+                <div class="col-sm-2 col-4">
+                    <h3><a href=".//Gold_flow_home.html" class="text-white">會員資訊</a></h3>
+                    <h5><a href="./register.html" class="text-white">會員註冊</a></h5>
+                    <h5><a href="./NotificationCenter.html" class="text-white">通知訊息</a></h5>
+                </div>
+                <div class="col-sm-2 col-4">
+                    <h3><a href="./Wallet.html" class="text-white">線上錢包</a></h3>
+                    <h5><a href="./Trade_record.html" class="text-white">交易紀錄</a></h5>
+                    <h5><a href="./Car_Licence_add.html" class="text-white">新增車牌</a></h5>
+                    <h5><a href="./Payment.html" class="text-white">線上繳費</a></h5>
+                </div>
+                <div class="col-sm-2 col-4">
+                    <h3 class="text-white">停車場資訊</h3>
+                    <h5><a href="./mobile_v13.html" class="text-white">路邊車位</a></h5>
+                    <h5><a href="./mobile_v13.html" class="text-white">停車場車位</a></h5>
+                    <h5><a href="./mobile_carStay_v3.html" class="text-white">車宿地點</a></h5>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 滾動 -->
+    <script>
+        window.onscroll = scrollFunction; //每當畫面捲動觸發一次
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                document.getElementById("myBtnTop").style.display = "block";
+            } else {
+                document.getElementById("myBtnTop").style.display = "none";
+            }
+        }//網頁捲動超過200pixel就會跑出來 display設定成block 跑回上面就隱藏。
+
+        // 重置scrollTop這個變數的值
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+    </script>
+
+
+    <!-- 登入後判斷頁面呈現與切換 -->
+    <script>
+        // 假設 memberID 存在於 localStorage 中
+        var memberID = localStorage.getItem('memberID');
+        var memberAc = localStorage.getItem('member_ac');
+
+        var loginHtml = `
+        <button id="ncBtn" class="rounded-3 NCplaceCenter mt-2 me-2">
+                <span id="ncCircle"></span>
+                <span id="ncIcon">
+                    <i id="defaultIcon" class='fas fa-car'
+                        style="color: #f8f8f8;  font-size: 15px;margin-bottom: 10px;"></i>
+                </span>
+            </button>
+                
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle nav-link logout text-white" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" id="userhello">
+                    </button>
+                    <ul class="dropdown-menu" style="">
+                        <li><a class="dropdown-item logout" href="./Gold_flow_home.html">會員中心</a></li>
+                        <li><a class="dropdown-item logout" href="./Car_Licence_add.html">新增車牌</a></li>
+                        <li><a class="dropdown-item logout" href="./Wallet.html">線上錢包</a></li>
+                        <li><a class="dropdown-item logout" href="./Payment.html">立即繳費</a></li>
+                        <li><a class="dropdown-item logout" href="./Trade_record.html">交易紀錄</a></li>
+                        <li><a class="dropdown-item logout clearLocalStroage" href="login.html">登出</a></li>
+                    </ul>
+                </div>
+        `;
+
+        var SignOutHtml = `
+                <a class="nav-link login me-3" href="register.html">註冊</a>
+                <a class="nav-link login " href="login.html">登入</a>
+        `
+        if (memberID) {
+            // 若 memberID 存在，表示已登入，顯示登出標籤，隱藏登入標籤
+            $('.navbar-nav').html(loginHtml);
+        } else {
+            // 若 memberID 不存在，表示未登入，顯示登入標籤，隱藏登出標籤
+            $('.navbar-nav').html(SignOutHtml);
+        }
+
+        $('.clearLocalStroage').on('click', function () {
+            localStorage.removeItem('memberID');
+        });
+
+        $('#userhello').text(memberAc + '你好');
+        // $('#userhello').on("click", function(){
+        //     window.location = "./Gold_flow_home.html"
+        // })
+
+    </script>
+
+    <!-- 導向繳費頁面 -->
+    <script>
+        $(".payment").on("click", function () {
+            window.location = "./Payment.html"
+        })
+    </script>
+    <!-- 導向通知中心 -->
+    <script>
+        $(".NotificationCenter").on("click", function () {
+            window.location = "./NotificationCenter.html"
+        })
+    </script>
+    <!-- 導向停車位查找 -->
+    <script>
+        $(".mobile_v13").on("click", function () {
+            window.location = "./mobile_v13.html"
+        })
+    </script>
+    <!-- map -->
+    <script>
+        //地圖顯示相關設定
+        let zoom = 17; // 0 - 18
+        let center = [24.137508915419836, 120.68694731120945]; // 中心點座標
+        let map = L.map('map').setView(center, zoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap', // 商用時必須要有版權出處
+            maxZoom: 18,
+            layerLimit: 20, // 設定顯示圖層數量上限為 20
+            zoomControl: true, // 是否秀出 - + 按鈕
+        }).addTo(map);
+        // remove zoomControl
+        map.zoomControl.remove();
+        // 禁止使用者操作地圖
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+        if (map.tap) map.tap.disable();
+        document.getElementById('map').style.cursor = 'default';
+
+        //停車場座標icon
+        var park60 = L.icon({ //add this new icon
+            iconUrl: './assets/image/map_control_img/park60.png',
+            iconSize: [20, 25], // size of the icon
+        }); //停車場綠燈座標圖
+        var park30 = L.icon({
+            iconUrl: './assets/image/map_control_img/park30.png',
+            iconSize: [20, 25],
+        }); //停車場黃燈座標圖
+        var park0 = L.icon({
+            iconUrl: './assets/image/map_control_img/park0.png',
+            iconSize: [20, 25]
+        }); //停車場紅燈座標圖
+
+        // user icon
+        var userIcon = L.icon({
+            iconUrl: './assets/image/map_control_img/user_place.png',
+            iconSize: [40, 40],
+        });
+
+        let usermarker, userZoomed, userlat, userlng;
+
+        // 持續刷新使用者位置並取得路邊停車點位
+        // 取得使用者點位
+        navigator.geolocation.watchPosition(success, error);
+
+        // 提示未啟用定位
+        function error(err) {
+            if (err.code === 1) {
+                alert("無法獲得位置資訊，請開啟定位功能或使用搜尋欄搜尋您所在地點");
+            } else {
+                alert('已啟用定位功能')
+            }
+        }
+
+        // 用來儲存距離和點位經緯度
+        let targetPoint = [];
+        let targetDis = [];
+
+        $('#targetBtn').on('click', function () {
+            // console.log(Math.min(...targetDis));
+            let targetIndex = targetDis.indexOf(Math.min(...targetDis));
+            // console.log(targetPoint[targetIndex]);
+            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + targetPoint[targetIndex][0] + ',' + targetPoint[targetIndex][1];
+            window.location.assign(url);
+        });
+        // 讀取搜尋框資料，儲存為sessionStorage
+        $("#searchPlace").keypress(function (event) {
+            if (event.which === 13) {
+                info = $('#searchPlace').val();
+                // console.log(info);
+                sessionStorage.setItem('searchInfo', info);
+                window.location = './mobile_v13.html';
+            }
+        })
+        function success(pos) {
+
+            userlat = pos.coords.latitude;
+            userlng = pos.coords.longitude;
+            // reset marker
+            if (usermarker) {
+                map.removeLayer(usermarker);
+            }
+            // add user marker
+            usermarker = L.marker([userlat, userlng], { icon: userIcon }).addTo(map);
+            map.setView([userlat, userlng], 15);
+            // userplace callback
+            addUserPlace(1000, userlat, userlng);
+        }
+
+        // userplace function
+        addUserPlace = (area, userlat, userlng) => {
+            refrash_road(area);
+            refrash_park();
+        }
+
+        let markers = undefined;
+        let markerList = [];
+        refrash_road = (cur_area) => {
+            let a = 0;
+            a = cur_area;
+            // 清空
+            markers = L.markerClusterGroup();
+            let car_parking_url = "https://motoretag.taichung.gov.tw/DataAPI/api/ParkingStreetAPI";
+            let car_parking_xhr = new XMLHttpRequest();
+            car_parking_xhr.open('GET', car_parking_url, true);
+            car_parking_xhr.send();
+            car_parking_xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    if (markers) {
+                        markers.clearLayers();
+                    }
+                    markerList = [];
+                    let response = JSON.parse(this.response);
+                    // console.log(response);
+                    $(response).each(function (i, parkInfo) {
+                        var roadlat = Number(parkInfo['PS_Lat']);
+                        var roadlng = Number(parkInfo['PS_Lng']);
+                        if (L.latLng(userlat, userlng).distanceTo(L.latLng(roadlat, roadlng)) < a) {
+                            if (parkInfo['status'] == 0) {
+                                targetPoint.push([roadlat, roadlng]);
+                                targetDis.push(L.latLng(userlat, userlng).distanceTo(L.latLng(roadlat, roadlng)));
+                                var parkOk = L.icon({
+                                    iconUrl: './assets/image/map_control_img/no_car.png',
+                                    iconSize: [15, 15],
+                                    className: 'roadOk'
+                                });
+                                var roadOk = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkOk });
+                                markerList.push(roadOk);
+                            } else {
+                                var parkNon = L.icon({
+                                    iconUrl: './assets/image/map_control_img/in_car.png',
+                                    iconSize: [15, 15],
+                                    className: 'roadNon'
+                                });
+                                var roadNon = L.marker([parkInfo['PS_Lat'], parkInfo['PS_Lng']], { icon: parkNon });
+                                markerList.push(roadNon);
+                            }
+                        }
+                    })
+                }
+                markers.addLayers(markerList);
+            };
+            map.addLayer(markers);
+        }
+
+        function refrash_park() {
+            // api匯入
+            let parking_park_url = "https://motoretag.taichung.gov.tw/DataAPI/api/ParkingSpotListAPI";
+            let parking_park_xhr = new XMLHttpRequest();
+            parking_park_xhr.open('GET', parking_park_url, true);
+            parking_park_xhr.send();
+            parking_park_xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    $(".parkDisabled").remove();
+                    $(".parkParents").remove();
+                    $(".parkNormal").remove();
+                    let response = JSON.parse(this.response);
+                    $(response).each(function (i, parkInfo) {
+                        $(parkInfo['ParkingLots']).each(function (i, parkMark) {
+                            // console.log(parkMark['Type'].includes('1'));
+                            targetPoint.push([parkMark['Y'], parkMark['X']]);
+                            targetDis.push(L.latLng(userlat, userlng).distanceTo(L.latLng(parkMark['Y'], parkMark['X'])));
+                            switch (parkMark['Type'].includes('1')) {
+                                case true:
+                                    // console.log('身障');
+                                    if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.6) {
+                                        var marker60 = L.marker([parkMark['Y'], parkMark['X']], { icon: park60 }).addTo(map);
+                                    } else if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.3) {
+                                        var marker30 = L.marker([parkMark['Y'], parkMark['X']], { icon: park30 }).addTo(map);
+                                    } else {
+                                        var marker0 = L.marker([parkMark['Y'], parkMark['X']], { icon: park0 }).addTo(map);
+                                    }
+                                    break;
+                                default:
+                                    switch (parkMark['Type'].includes('2')) {
+                                        case true:
+                                            // console.log('親子車位')
+                                            if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.6) {
+                                                var marker60 = L.marker([parkMark['Y'], parkMark['X']], { icon: park60 }).addTo(map);
+                                            } else if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.3) {
+                                                var marker30 = L.marker([parkMark['Y'], parkMark['X']], { icon: park30 }).addTo(map);
+                                            } else {
+                                                var marker0 = L.marker([parkMark['Y'], parkMark['X']], { icon: park0 }).addTo(map);
+                                            }
+                                            break;
+                                        default:
+                                            // console.log('無特殊車位')
+                                            if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.6) {
+                                                var marker60 = L.marker([parkMark['Y'], parkMark['X']], { icon: park60 }).addTo(map);
+                                            } else if (parkMark['AvailableCar'] / parkMark['TotalCar'] > 0.3) {
+                                                var marker30 = L.marker([parkMark['Y'], parkMark['X']], { icon: park30 }).addTo(map);
+                                            } else {
+                                                var marker0 = L.marker([parkMark['Y'], parkMark['X']], { icon: park0 }).addTo(map);
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
+
+                        })
+                    })
+                }
+            }
+        }
+
+    </script>
+
+   <!-- 通知中心 -->
+   <script>
+    // 首頁通知按鍵
+    var ncContainerVisible = false; // 追蹤 ncContainer 的顯示狀態
+
+    // $('.ncCount').hide();
+    $('.overlay').hide();
+    $('#ncBtn').on('click', function () {
+        if (ncContainerVisible) {
+            hidencContainer();
+        } else {
+            showncContainer();
+        }
+    });
+
+    $('.overlay').on('click', function () {
+        togglencContainer();
+    });
+
+    function showncContainer() {
+        $('.ncContainer').css('display', 'block');
+        $('.overlay').show();
+        ncContainerVisible = true;
+    }
+
+    function hidencContainer() {
+        $('.ncContainer').css('display', 'none');
+        $('.overlay').hide();
+        ncContainerVisible = false;
+    }
+
+    function togglencContainer() {
+        if (ncContainerVisible) {
+            hidencContainer();
+        } else {
+            showncContainer();
+        }
+    }
+
+
+    // 分頁內容
+    var hasContent = false; // 標記分頁是否有內容的變量
+
+    function resetHasContent() {
+        hasContent = false;
+    }
+
+    window.onload = function () {
+        $('.ncCount').hide();
+    };
+
+    function btnAll() {
+        $(".ncData_off").removeClass("ncData_off");
+        $(".mergedArray_data").show();
+        $(".mergedArray_fromS").show();
+        $('.ncCount').hide();
+        resetHasContent();
+
+        for (i = 0; i < $('div[dataType]').length; i++) {
+            var trType = $('div[dataType]')[i].getAttribute('dataType');
+            if (trType) {
+                // console.log(trType);
+                hasContent = true;
+            }
+        }
+
+        for (i = 0; i < $('div[datalicense]').length; i++) {
+            var trlicense = $('div[datalicense]')[i].getAttribute('datalicense');
+            if (trlicense) {
+                // console.log(trlicense);
+                hasContent = true;
+            }
+        }
+        // 分頁沒有內容就執行
+        if (!hasContent) {
+            $('.ncCount').show();
+        }
+
+
+    }
+
+
+    function btnAdd() {
+        $(".ncData_off").removeClass("ncData_off");
+        $(".mergedArray_data").show();
+        $(".mergedArray_fromS").hide();
+        $('.ncCount').hide();
+        resetHasContent();
+
+        for (i = 0; i < $('div[dataType]').length; i++) {
+            var trType = $('div[dataType]')[i].getAttribute('dataType');
+            if (trType === "0") {
+                // console.log(trType);
+                hasContent = true;
+            } else {
+                // console.log(trType + "nono");
+                $($('div[dataType]')[i]).addClass("ncData_off")
+            }
+        }
+        // 分頁沒有內容就執行
+        if (!hasContent) {
+            $('.ncCount').show();
+        }
+    }
+
+    function btnMin() {
+        $(".ncData_off").removeClass("ncData_off");
+        $(".mergedArray_data").show();
+        $(".mergedArray_fromS").hide();
+        $('.ncCount').hide();
+        resetHasContent();
+
+
+
+        for (var i = 0; i < $('div[dataType]').length; i++) {
+            var trType = $('div[dataType]')[i].getAttribute('dataType');
+            if (trType === "1") {
+                hasContent = true; // 如果分頁有內容，將變量設置為 true
+                // console.log(trType);
+            } else {
+                // console.log(trType + "nono");
+                $($('div[dataType]')[i]).addClass("ncData_off")
+            }
+        }
+
+        // 分頁沒有內容就執行
+        if (!hasContent) {
+            $('.ncCount').show();
+        }
+    }
+
+
+
+
+    function btnAready() {
+        $(".ncData_off").removeClass("ncData_off");
+        $(".mergedArray_data").show();
+        $(".mergedArray_fromS").hide();
+        $('.ncCount').hide();
+        resetHasContent();
+
+
+        for (i = 0; i < $('div[dataType]').length; i++) {
+            var trType = $('div[dataType]')[i].getAttribute('dataType');
+            if (trType === "2") {
+                // console.log(trType);
+                hasContent = true;
+            } else {
+                // console.log(trType + "nono");
+                $($('div[dataType]')[i]).addClass("ncData_off")
+            }
+        }
+        // 分頁沒有內容就執行
+        if (!hasContent) {
+            $('.ncCount').show();
+        }
+    }
+
+    function btnNo() {
+        $(".ncData_off").removeClass("ncData_off");
+        $(".mergedArray_data").hide();
+        $(".mergedArray_fromS").show();
+        $('.ncCount').hide();
+        resetHasContent();
+
+
+        for (i = 0; i < $('div[datalicense]').length; i++) {
+            var trlicense = $('div[datalicense]')[i].getAttribute('datalicense');
+            if (trlicense) {
+                // console.log(trlicense);
+                hasContent = true;
+            }
+        }
+        // 分頁沒有內容就執行
+        if (!hasContent) {
+            $('.ncCount').show();
+        }
+    }
+
+
+
+    // 資料庫
+    var traderecords = [];
+    var datafrom = [];
+    var ncid = localStorage.getItem("memberID");
+
+    // 獲取交易紀錄和付款資料
+    function refreshData() {
+        var traderecordPromise = $.ajax({
+            url: `http://localhost:3000/select/traderecord/${ncid}`,
+            type: "GET"
+        });
+
+        var paymentPromises = $.ajax({
+            url: `http://localhost:3000/select/license/${ncid}`,
+            type: "GET"
+        }).then(function (x) {
+            var dataS = JSON.parse(x);
+            var paymentPromises = [];
+
+            for (var i = 0; i < dataS.length; i++) {
+                var li = dataS[i].license;
+
+                paymentPromises.push(
+                    $.ajax({
+                        url: `http://localhost:3000/select/payment/${li}`,
+                        type: "GET"
+                    })
+                );
+            }
+
+            return Promise.all(paymentPromises);
+        });
+
+        Promise.all([traderecordPromise, paymentPromises]).then(function (results) {
+            var traderecord = JSON.parse(results[0]);
+
+            traderecords = traderecords.concat(traderecord);
+
+            for (var i = 0; i < results[1].length; i++) {
+                var datafromS = JSON.parse(results[1][i]);
+                datafromS.sort(function (a, b) {
+                    return new Date(b.py_ps_d) - new Date(a.py_ps_d);
+                });
+
+                datafrom = datafrom.concat(datafromS);
+            }
+
+            mergeData();
+        });
+    }
+
+    refreshData();
+
+
+
+    // 整合兩個資料庫內容
+    var mergedArrays = [];
+    var mergeDataCallCount = 0;
+    function mergeData() {
+        // console.log(traderecords);
+        // console.log(datafrom);
+
+        // 查看 mergeData() 被呼叫的次數
+        mergeDataCallCount++;
+
+        var mergedArray = traderecords.concat(datafrom);
+
+        if (mergedArray.length > 0) {
+            mergedArrays.push(...mergedArray);
+        }
+
+        unread();
+
+        // 儲值/提領/已繳費
+        if (mergedArray.some(item => item.hasOwnProperty('tr_type'))) {
+            for (i = 0; i < mergedArray.length; i++) {
+                if (!mergedArray[i].hasOwnProperty('tr_type')) {
+                    continue; // 跳過沒有 tr_type 的項目
+                }
+
+                var type;
+                switch (mergedArray[i].tr_type) {
+                    case 0: type = "儲值";
+                        break;
+                    case 1: type = "提款";
+                        break;
+                    case 2: type = "繳費";
+                        break;
+                }
+                // console.log(type);
+                if (type == "繳費") {
+                    $(".mergedArray_data").append(
+                        `<div class="row NCplaceCenter mb-3" dataType = "${mergedArray[i].tr_type}">
+                        <div class="col-12 NCcard border border-light rounded-3">
+                                <span class="NCcardTitle" style="color: #34A853;"><b class="me-1">${mergedArray[i].tr_date}</b><b>${type}成功</b></span>
+                            <div class="NCcardText">
+                                <span><b>${mergedArray[i].tr_location}</b></span>
+                                <span class="NCcardMoney" style=" color: #34A853;"><b>$</b><b>${mergedArray[i].tr_amount}</b></span>
+                            </div>
+                                <span class="NCcardDate">${mergedArray[i].tr_ps}</span>
+                        </div>
+                    </div>`
+                    );
+                } else {
+                    $(".mergedArray_data").append(
+                        `<div class="row NCplaceCenter mb-3" dataType = "${mergedArray[i].tr_type}">
+                        <div class="col-12 NCcard border border-light rounded-3">
+                                <span class="NCcardTitle" style="color: #34A853;"><b class="me-1">${mergedArray[i].tr_date}</b><b>${type}成功</b></span>
+                            <div class="NCcardText">
+                                <span><b>[${type}]${mergedArray[i].tr_counterparty}</b></span>
+                                <span class="NCcardMoney" style=" color: #34A853;"><b>$</b><b>${mergedArray[i].tr_amount}</b></span>
+                            </div>
+                                <span class="NCcardDate">${mergedArray[i].tr_date}</span>
+                        </div>
+                    </div>`
+                    );
+                }
+            }
+            // console.log("mergeData() called " + mergeDataCallCount + " times");
+        }
+
+        // 尚未繳費
+        var pylos = [];
+        var py = mergedArray.filter(function (item) {
+            return item.hasOwnProperty("license");
+        });
+        // console.log(py);
+
+        for (let m = 0; m < py.length; m++) {
+            var pylo = py[m].py_location;
+            if (pylo.includes("路邊停車")) {
+                // console.log(pylo);
+
+                if (py[m].py_location == pylo) {
+                    // console.log(py[m]);
+
+                    // 繳費期限
+                    var parkingDate = new Date(py[m].py_ps_d);
+                    var paymentDueDate = new Date(parkingDate);
+                    paymentDueDate.setDate(paymentDueDate.getDate() + 30);
+                    var paymentDueDateString = paymentDueDate.toISOString().slice(0, 10).replace(/-/g, '/');
+
+                    $(".mergedArray_fromS").append(
+                        ` <div class="row NCplaceCenter mb-3" datalicense="${py[m].license}">
+                            <div class="col-12 NCcard border border-light rounded-3" id="btnNo">
+                                <span class="NCcardTitle" style="color: #FF4545;"><b>繳費提醒</b></span>
+                                <div class="NCcardText">
+                                    <span><b>${py[m].py_location}</b></span>
+                                    <span class="NCcardMoney" style=" color: #FF4545;"><b>$</b><b>${py[m].py_amount}</b></span>
+                                    </div>
+                                <p class="NCcardT"> 車牌: ${py[m].license}</p>
+                                <p class="NCcardT"> 停車日期: ${py[m].py_ps_d}</p>
+                                <p class="NCcardT"> 繳費期限: ${paymentDueDateString} </p>
+                            </div>
+                        </div>`
+                    )
+                }
+            }
+        }
+    }
+
+
+
+    // 未讀通知提醒
+    var totalCounts = [];
+    var countP = [];
+    var countT = [];
+    function unread() {
+        // console.log(mergedArrays);
+        var filterT = mergedArrays.filter(function (item) {
+            return item.hasOwnProperty("tr_read");
+        });
+        // console.log(filterT);
+
+        if (filterT) {
+            countT.push(filterT);
+        }
+
+        var tr_unreadCount = 0;
+        for (let i = 0; i < filterT.length; i++) {
+            var dataT = filterT[i].tr_read;
+            if (dataT == 0) {
+                tr_unreadCount++;
+            }
+        }
+        // console.log("未讀訊息: " + tr_unreadCount);
+
+        // 未繳費
+        var filterP = mergedArrays.filter(function (item) {
+            return item.hasOwnProperty("license");
+        });
+
+        var py_unreadCount = 0;
+        for (let p = 0; p < filterP.length; p++) {
+            var Pcount = filterP[p].py_location;
+            if (Pcount.includes("路邊停車")) {
+                // console.log(Pcount);
+                var filterData = filterP[p].py_read;
+                if (filterData == 0) {
+                    py_unreadCount++;
+                }
+
+                if (Pcount) {
+                    countP.push(Pcount);
+                }
+            }
+        }
+
+        // 全部的未讀訊息
+        var totalUnreadCount = tr_unreadCount + py_unreadCount;
+        // console.log("未讀訊息總數:" + totalUnreadCount);
+
+        var ncIcon = document.getElementById('ncIcon');
+        var ncCircle = document.getElementById('ncCircle');
+
+        if (totalUnreadCount > 0) {
+            ncIcon.innerHTML = "<b class='NCplaceCenter' style='color: white; font-size: 16px;'>" + totalUnreadCount + "</b>";
+            ncCircle.innerHTML = "<i class='fas fa-circle iconNcircle';></i>";
+        } else {
+            ncIcon.innerHTML = "<i id='defaultIcon' class='fas fa-car' style='color: white; width: 15px;'></i>";
+            ncCircle.innerHTML = "";
+        }
+
+        if (totalUnreadCount) {
+            totalCounts.push(totalUnreadCount);
+        }
+        // console.log(totalCounts);
+        ncBtn();
+
+    }
+    // }
+
+
+    function ncBtn() {
+        $('#ncBtn').on('click', function () {
+            var licenses = [];
+            $("div[datalicense]").each(function () {
+                var license = $(this).attr('datalicense');
+                licenses.push(license);
+            });
+            // console.log(licenses);
+
+            $.ajax(
+                {
+                    url: "http://localhost:3000/update/ncread",
+                    type: "PUT",
+                    data: {
+                        id: ncid,
+                        license: licenses
+                    }
+                }
+            ).done(function () {
+                console.log("x");
+            });
+
+
+            // 歸零未讀筆數
+            totalCounts[0] = 0;
+
+            // 更新 mergedArrays 中的已讀狀態
+            for (var i = 0; i < mergedArrays.length; i++) {
+                if (mergedArrays[i].hasOwnProperty("tr_read")) {
+                    mergedArrays[i].tr_read = 1;
+                }
+                if (mergedArrays[i].hasOwnProperty("py_read")) {
+                    mergedArrays[i].py_read = 1;
+                }
+            }
+
+            // 更新未讀筆數顯示
+
+
+            unread();
+        })
+    }
+
+</script>
+
+
+
+    <!-- bs js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>

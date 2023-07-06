@@ -1,0 +1,13 @@
+1.Parking_PROJECT_server 右鍵開啟終端機
+2.開啟小象 (MAMP)
+3.打開瀏覽器到http://localhost:8888/phpMyAdmin/8888
+  看你MAMP的設定  如果不知道MAMP>preferences>ports>apache port
+4.打開parking.sql
+5.按照parking.sql 裡面的新建指令建置資料庫
+6.在終端機執行node index.js
+7.http://localhost:3000 應該可以看到 我是server
+8.Parking_PROJECT_client 資料夾裡面 要資料範例.html 有寫好要資料的jQuery
+
+車宿塞資料.html沒用到車宿資料表的可以不用開
+流量塞資料.html沒用到流量資料表的可以不用開
+

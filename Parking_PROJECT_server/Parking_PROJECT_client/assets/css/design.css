@@ -1,0 +1,130 @@
+/* 全域基礎設定 */
+
+/* google字體 */
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
+
+* {
+    /* 中文 */
+    /* font-family: 'Noto Sans TC', sans-serif; */
+    /* 英文 */
+    /* font-family: 'Montserrat', sans-serif; */
+    letter-spacing: 0.1rem;
+}
+
+/* Bootstrap更改設定 */
+.navbar-nav {
+    flex-direction: inherit;
+}
+
+.navbar .navbar-nav a {
+    margin-left: 30px;
+}
+
+nav,
+.bg-blue {
+    background-color: #0069B4;
+}
+
+.nav-link {
+    color: #FFF800;
+}
+
+h1 {
+    font-family: 'Nunito';
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 44px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+h3 {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 25px;
+}
+
+h4 {
+    font-family: Nunito;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+h5 {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+}
+
+h6 {
+    font-family: Nunito;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+p {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+}
+
+.card {
+    border: 0px;
+}
+
+@media (min-width: 768px) {
+    .appText_a {
+        margin-left: 50%;
+    }
+
+    /* .appText_b {
+        margin-right: 50%;
+    } */
+
+    .bg-app_a {
+        position: absolute;
+        left: -150px;
+        top: 100px;
+    }
+
+    .bg-app_b {
+        position: absolute;
+        right: -50px;
+        top: -100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .bg-app_a {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .bg-app_b {
+        max-width: 100%;
+        height: auto;
+        margin-top: -120px;
+        margin-left: 20px;
+    }
+}
+
+.bg-yellow {
+    background: #FFF800;
+}
+
+footer a {
+    text-decoration: none;
+}

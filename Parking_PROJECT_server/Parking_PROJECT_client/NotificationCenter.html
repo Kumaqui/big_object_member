@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotificationCenter</title>
+    <!-- bootstrap5-->
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css">
+
+    <!-- w3s icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <style>
+        .placeCenter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .topBgc {
+            background-color: #0069B4;
+            height: 47px;
+            display: flex;
+            align-items: center;
+            left: 0;
+        }
+
+        .topBgc i {
+            color: white;
+            margin-left: 25px;
+        }
+
+        .topWord {
+            font-size: 18px;
+            display: flex;
+            margin: auto;
+            justify-content: center;
+            color: white;
+        }
+
+        .card {
+            width: 80%;
+            height: 90px;
+            box-shadow: 0px 2px 5px 0px rgba(216, 215, 215, 0.4);
+        }
+
+        .cardTitle {
+            font-size: 18px;
+            margin-top: 5px;
+
+        }
+
+        .cardText {
+            font-size: 18px;
+            position: relative;
+        }
+
+        .cardMoney {
+            position: absolute;
+            right: 0;
+        }
+
+        .cardDate {
+            font-size: 12px;
+            color: #ACACAC;
+        }
+
+        .Classification {
+            border-radius: 35%;
+            background-color: white;
+            color: #0069B4;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .Classification:hover {
+            background-color: #d8d7d7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row topBgc mb-3">
+            <div class="col-4" style="padding: 0;">
+                <i class="bi bi-chevron-left index"></i>
+            </div>
+            <div class="col-4">
+                <p class="topWord"><b>通知中心</b> </p>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12 placeCenter mb-3">
+                <button type="button" id="allPage" onclick="btnAll()"
+                    class="border border-light p-2 me-1 Classification">全部</button>
+                <button type="button" onclick="btnAdd()" class="border border-light p-2 me-1 Classification">儲值</button>
+                <button type="button" onclick="btnMin()" class="border border-light p-2 me-1 Classification">提領</button>
+                <button type="button" onclick="btnAready()"
+                    class="border border-light p-2 me-1 Classification">已繳費</button>
+                <button type="button" onclick="btnNo()" class="border border-light p-2 Classification">未繳費</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12" id="div1"></div>
+        </div>
+        <div class="row">
+            <div class="col-12" id="div2"></div>
+        </div>
+        <div class="row">
+            <div class="col-12" id="div3"></div>
+        </div>
+        <div class="row">
+            <div class="col-12" id="div4"></div>
+        </div>
+        <div class="row">
+            <div class="col-12" id="div5"></div>
+        </div>
+
+
+
+
+        <script>
+            window.onload = function () {
+                document.getElementById("allPage").click();
+            };
+
+            $(".index").on("click", function(){
+                window.location = "./index.html"
+            })
+
+            // 導入資料+分頁
+            function btnAll() {
+                $("#div1").show();
+                $("#div2").hide();
+                $("#div3").hide();
+                $("#div4").hide();
+                $('#div5').show();
+            }
+            function btnAdd() {
+                $('#div1').hide();
+                $('#div2').show();
+                $('#div3').hide();
+                $('#div4').hide();
+                $('#div5').hide();
+            }
+
+            function btnMin() {
+                $('#div1').hide();
+                $('#div2').hide();
+                $('#div3').show();
+                $('#div4').hide();
+                $('#div5').hide();
+            }
+
+            function btnAready() {
+                $('#div1').hide();
+                $('#div2').hide();
+                $('#div3').hide();
+                $('#div4').show();
+                $('#div5').hide();
+            }
+
+            function btnNo() {
+                $('#div1').hide();
+                $('#div2').hide();
+                $('#div3').hide();
+                $('#div4').hide();
+                $('#div5').show();
+            }
+
+            data = [];
+            $.ajax({
+                url: "http://localhost:3000/select/traderecord/1",
+                type: "GET"
+            }).done(function (x) {
+                var traderecord = JSON.parse(x);
+                // console.log(traderecord);
+                traderecord.sort(function (a, b) {
+                    return new Date(b.tr_date + ' ' + b.tr_time) - new Date(a.tr_date + ' ' + a.tr_time);
+                });
+
+                console.log(traderecord);
+                data = traderecord;
+
+                for (i = 0; i < traderecord.length; i++) {
+                    var type;
+                    switch (traderecord[i].tr_type) {
+                        case 0: type = "儲值";
+                            break;
+                        case 1: type = "提款";
+                            break;
+                        case 2: type = "繳費";
+                            break;
+                    }
+                    // console.log(type);
+                    if (type == "繳費") {
+                        $("#div4").append(
+                            `<div class="row placeCenter mb-3 ">
+                                <div class="col-12 card border border-light rounded-3">
+                                        <span class="cardTitle" style="color: #34A853;"><b class="me-1">${traderecord[i].tr_date}</b><b class="me-3">${traderecord[i].tr_time}</b><b>${type}成功</b></span>
+                                    <div class="cardText">
+                                        <span><b>${traderecord[i].tr_location}</b></span>
+                                        <span class="cardMoney"><i class="fa fa-dollar"></i><b>${traderecord[i].tr_amount}</b></span>
+                                    </div>
+                                        <span class="cardDate">${traderecord[i].tr_ps}</span>
+                                </div>
+                            </div>`
+                        );
+                    } else if (type == "儲值") {
+                        // console.log(type);
+                        $("#div2").append(
+                            `<div class="row placeCenter mb-3">
+                                <div class="col-12 card border border-light rounded-3">
+                                        <span class="cardTitle" style="color: #34A853;"><b class="me-1">${traderecord[i].tr_date}</b><b class="me-3">${traderecord[i].tr_time}</b><b>${type}成功</b></span>
+                                    <div class="cardText">
+                                        <span><b>[${type}]${traderecord[i].tr_counterparty}</b></span>
+                                        <span class="cardMoney"><i class="fa fa-dollar"></i><b>${traderecord[i].tr_amount}</b></span>
+                                    </div>
+                                        <span class="cardDate">${traderecord[i].tr_date}</span>
+                                </div>
+                            </div>`
+                        );
+                    } else if (type == "提款") {
+                        // console.log(type);
+                        $("#div3").append(
+                            `<div class="row placeCenter mb-3">
+                                <div class="col-12 card border border-light rounded-3">
+                                        <span class="cardTitle" style="color: #34A853;"><b class="me-1">${traderecord[i].tr_date}</b><b class="me-3">${traderecord[i].tr_time}</b><b>${type}成功</b></span>
+                                    <div class="cardText">
+                                        <span><b>[${type}]${traderecord[i].tr_counterparty}</b></span>
+                                        <span class="cardMoney"><i class="fa fa-dollar"></i><b>${traderecord[i].tr_amount}</b></span>
+                                    </div>
+                                        <span class="cardDate">${traderecord[i].tr_date}</span>
+                                </div>
+                            </div>`
+                        );
+                    }
+
+
+                }
+
+                for (i = 0; i < data.length; i++) {
+                    var type;
+                    switch (data[i].tr_type) {
+                        case 0: type = "儲值";
+                            break;
+                        case 1: type = "提款";
+                            break;
+                        case 2: type = "繳費";
+                            break;
+                    }
+                    if (type == "繳費") {
+                        $("#div1").append(
+                            `<div class="row placeCenter mb-3 ">
+                                <div class="col-12 card border border-light rounded-3">
+                                        <span class="cardTitle" style="color: #34A853;"><b class="me-1">${data[i].tr_date}</b><b class="me-3">${data[i].tr_time}</b><b>${type}成功</b></span>
+                                    <div class="cardText">
+                                        <span><b>${data[i].tr_location}</b></span>
+                                        <span class="cardMoney"><i class="fa fa-dollar"></i><b>${data[i].tr_amount}</b></span>
+                                    </div>
+                                        <span class="cardDate">${data[i].tr_ps}</span>
+                                </div>
+                            </div>`
+                        );
+                    } else {
+                        $("#div1").append(
+                            `<div class="row placeCenter mb-3">
+                                <div class="col-12 card border border-light rounded-3">
+                                        <span class="cardTitle" style="color: #34A853;"><b class="me-1">${data[i].tr_date}</b><b class="me-3">${data[i].tr_time}</b><b>${type}成功</b></span>
+                                    <div class="cardText">
+                                        <span><b>[${type}]${data[i].tr_counterparty}</b></span>
+                                        <span class="cardMoney"><i class="fa fa-dollar"></i><b>${data[i].tr_amount}</b></span>
+                                    </div>
+                                        <span class="cardDate">${data[i].tr_date}</span>
+                                </div>
+                            </div>`
+                        );
+                    }
+                }
+
+            })
+            
+            setTimeout("console.log(data);",3000);
+
+
+            // 尚未繳費
+            $.ajax({
+                url: "http://localhost:3000/select/payment",
+                type: "GET"
+            }).done(function (x) {
+                var datafromS = JSON.parse(x);
+                console.log(datafromS);
+
+                datafromS.sort(function (a, b) {
+                    return new Date(b.py_ps_d) - new Date(a.py_ps_d);
+                });
+
+
+                for (i = 0; i < datafromS.length; i++) {
+                    // console.log(datafromS[i]);
+                    $("#div5").append(
+                        `<div class="row placeCenter mb-3">
+                        <div class="col-12 card border border-light rounded-3" id="btnNo">
+                            <span class="cardTitle" style="color: #FF4545;"><b>尚未繳費</b></span>
+                             <div class="cardText">
+                                <span><b>${datafromS[i].py_location}</b></span>
+                                <span class="cardMoney"><i class="fa fa-dollar"></i><b>${datafromS[i].py_amount}</b></span>
+                                <p class="cardDate">${datafromS[i].py_ps_d} - ${datafromS[i].py_pe_d}</p>
+                            </div>  
+                        </div>
+                    </div>`
+                    )
+                }
+                console.log(datafromS);
+
+            })
+
+
+            var aaArray = [];
+
+
+
+
+        </script>
+
+</body>
+
+</html>

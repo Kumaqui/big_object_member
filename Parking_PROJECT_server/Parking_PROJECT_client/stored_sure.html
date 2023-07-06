@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儲值確認</title>
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="./assets/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <style>
+        table tr td {
+            font-size: 18px;
+            color: rgb(150, 150, 150);
+            padding: 16px;
+            border-bottom: 1px rgba(200, 200, 200, 0.444) solid;
+            /* width: 1%; */
+        }
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+
+        .color_gary {
+            color: rgb(126, 123, 123)
+        }
+
+        .border_gray {
+            border: 1px rgb(126, 123, 123) solid;
+        }
+
+        .dis_flex_column_center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .border_none {
+            border: none;
+            background-color: transparent;
+        }
+
+        .body_color {
+            background-size: cover;
+            background-color: rgba(206, 206, 206, 0.302)
+        }
+
+
+        .btn_i {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .bg_blue {
+            background-color: #0069B4;
+        }
+
+        .bg_white {
+            background-color: white;
+        }
+
+        .color_white {
+            color: white;
+        }
+
+        .color_blue {
+            color: #0069B4
+        }
+
+        .btn-gray {
+            width: 100%;
+            background-color: rgba(128, 128, 128, 0.241);
+            border-radius: 10px;
+            color: #0069B4;
+            border: none;
+            font-size: 18px;
+            padding: 3px;
+            box-shadow: 0px 15px 0px 0px rgba(37, 37, 37, 0.241);
+            transition: all .4s;
+        }
+
+        .btn-gray:hover {
+            background-color: rgba(212, 211, 211, 0.42)
+        }
+
+
+
+        .btn-gray:active {
+            transform: translate(0, 5px);
+            box-shadow: 0px 1px 0px 0px rgba(55, 55, 55, 0.241);
+        }
+
+        .btn_blue:hover {
+
+            background-color: rgb(0, 135, 231)
+        }
+
+
+
+        .btn_blue:active {
+            transform: translate(0, 5px);
+            box-shadow: 0px 1px 0px 0px rgb(0, 81, 139);
+        }
+
+        .btn_blue {
+            width: 100%;
+            border: none;
+            background-color: rgb(0, 106, 181);
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            padding: 3px;
+            text-shadow: -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144);
+            box-shadow: 0px 15px 0px 0px rgb(1, 84, 144);
+            transition: all .4s;
+        }
+        .dis_flex_row_j_center {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+
+<body class="body_color">
+
+    <!-- 導覽列 -->
+    <div class="bg_blue">
+        <div style="position: absolute; left:5px">
+            <button class="border_none btn_i stored_value">
+                <i class="fa fa-angle-left"></i>
+            </button>
+        </div>
+        <div class="dis_flex_row_j_center pt-1">
+            <h2 class="color_white">
+                <b>確認儲值資訊</b>
+            </h2>
+        </div>
+    </div>
+    <div class="bg_white" style="padding-top: 20px; padding-bottom: 50px;">
+
+        <div class="container">
+            <table>
+                <tr>
+                    <td>儲值日期</td>
+                    <td id="date"></td>
+                </tr>
+
+                <tr>
+                    <td>儲值方式</td>
+                    <td id="bank"></td>
+                </tr>
+
+                <tr>
+                    <td>儲值帳號</td>
+                    <td>Car Parking帳戶</td>
+                </tr>
+                <tr>
+                    <td>幣別</td>
+                    <td>新台幣</td>
+                </tr>
+                <tr>
+                    <td>儲值金額</td>
+                    <td id="stored"></td>
+                </tr>
+            </table>
+
+
+
+        </div>
+
+
+
+    </div>
+    <br>
+    <div class="container ">
+        <div class="dis_flex_row ms-4">
+            <div><i class="fa fa-info color_blue" style="font-size: 16px;"></i></div>
+            <div style="margin-left: 8px;margin-top: 4px;">
+                <h5 class="color_gary">確認後立即從綁定帳戶扣款，儲存Car Parking錢包</h5>
+            </div>
+
+        </div>
+
+        <button id="a01" class="btn_blue mt-3" type="submit" value="Submit">
+            <b>確定儲值</b> </button>
+        <button id="a02" class="btn-gray" style="margin-top: 30px;" type="submit" value="Submit">
+            <b>取消</b>
+        </button>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <script>
+        var bank = sessionStorage.getItem("bank");
+        var stored = sessionStorage.getItem("stored");
+        var date = new Date();
+
+        var tm = date.getMonth() + 1;
+        var td = date.getDate();
+        // console.log(td)
+        if (tm.toString.length == 1) {
+            tm = "0" + tm;
+        }
+        td = td < 10 ? "0" + td : td;
+
+        $("#date").append(`${date.getFullYear()} / ${tm} / ${td}`)
+        $("#bank").append(bank)
+        $("#stored").append(`${stored}元`)
+
+        $("#a02").on("click", function () {
+            window.location = "./Gold_flow_home.html"
+        })
+
+        $(".stored_value").on("click", function () {
+            window.location = "./stored_value.html"
+        })
+
+        $("#a01").on("click", function () {
+            window.location = "./stored_success.html"
+        })
+    </script>
+
+
+</body>
+
+</html>

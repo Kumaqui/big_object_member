@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交易紀錄</title>
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="./assets/font-awesome-4.7.0/css/font-awesome.css">
+    <!-- bootstrap5-->
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="./assets/css/BANK_ACCOUNT.css">
+</head>
+
+<body style="background-size: cover; background-color: rgba(206, 206, 206, 0.302)">
+    <div class='mask_gray mask_off'></div>
+    <!-- 導覽列 -->
+    <div style="position: absolute; left:5px">
+        <button class=" border_none btn_i G_F_H">
+            <i class="fa fa-angle-left"></i>
+        </button>
+    </div>
+    <div class="bg_blue dis_flex_row_j_center pt-1">
+        <h2 class="color_white  ">
+            <b>交易紀錄</b>
+        </h2>
+    </div>
+
+    <!-- 會員資料區 -->
+    <div style="background-color: white;">
+        <div class="container" style="padding-top: 20px;">
+            <div class="row">
+                <div class="col-12" style="text-align:center">
+                    <h4 id="memberid">
+                    </h4>
+                   
+                       
+                    <span style="font-size: 24px;" id="money">1000</span>
+                    <span style="font-size: 14px;">元</span>
+                    <hr>
+                    <div id="typeChoose">
+
+                        <div class="container">
+                            <button class="date1_btn">日期
+                                <i class="material-icons" style="vertical-align: bottom;">keyboard_arrow_down
+                                </i>
+                            </button>
+                            <button>交易類型
+                                <i class="material-icons" style="vertical-align: bottom;">keyboard_arrow_down
+                                </i>
+                            </button>
+                            <hr>
+                            <div class="modal_none loc1_btn" style="background-color: white;">
+                                <div>
+                                    <button>地點
+                                        <i class="material-icons" style="vertical-align: bottom;">keyboard_arrow_down
+                                        </i>
+                                    </button>
+                                </div>
+                                <hr>
+                            </div>
+                            <div class="container">
+                                <div class="row" id="traderecord_data">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+        <hr>
+    </div>
+
+
+
+
+    <div id="dateModal" class="data_modal modal_none" style="background-color: white; align-items: flex-end;">
+
+        <div class="modal-content mt-1">
+            <button class="close">X</button>
+            <h3 style="text-align: center;">日期</h3>
+            <hr style="margin-top: -3px;">
+            <div class="container">
+                <div>
+                    <h5 class="mb-1">選擇時間區間</h5>
+                    起始日期: <input type="date" style="display: inline;" name="date1"><br>
+                    結束日期: <input type="date" style="display: inline;" name="date2">
+                </div>
+                <button id="dateChoose">
+                    <h4>選擇日期</h4>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    </div>
+    <div id="TradetypeModal" class="data_modal modal_none" style="background-color: white; align-items: flex-end;">
+
+        <div class="modal-content">
+            <button class="close">X</button>
+            <h3 style="text-align: center;">交易類型</h3>
+            <hr style="margin-top: -3px;">
+            <div class="container">
+                <div class="row form_btn" style="align-items: center; padding-bottom: 5px;">
+                    <div class="col-4">
+                        <button class="loc_btn" datatypechoose value="0" name="datatypechoose" income>儲值</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="loc_btn" datatypechoose value="1" name="datatypechoose" expenditure>提領</button>
+                    </div>
+                    <div class="col-4">
+                        <button class="loc_btn" datatypechoose value="2" name="datatypechoose" fee>繳費</button>
+                    </div>
+
+                </div>
+                <button id="trTypeChoose">
+                    <h4>選擇類型</h4>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        var member_ac = localStorage.getItem("member_ac")
+        if (!member_ac) {
+            window.location = "./login.html"
+        }
+    </script>
+    <script>
+        var id = localStorage.getItem("memberID")
+        // modal區
+        var modal = document.getElementsByClassName("date_modal")
+        $('#typeChoose .container .date1_btn').on('click', function () {
+            modal_block($('#dateModal'))
+            maskOn()
+        })
+        $('#typeChoose div div div button').on('click', function () {
+            modal_block($('#locationModal'))
+            maskOn()
+        })
+        $('#typeChoose div button:first-child+button').on('click', function () {
+            modal_block($('#TradetypeModal'))
+            // modal_block($(".loc1_btn"))
+            maskOn()
+        })
+        $('.close').on('click', function () {
+            closeModal()
+            maskOff()
+        })
+        window.onclick = function (event) {
+            if ($(event.target).hasClass('mask_on') == true) {
+                closeModal()
+                maskOff()
+            }
+        }
+        function closeModal() {
+            $('.data_modal').removeClass("modal_block");
+            $('.data_modal').addClass("modal_none");
+        }
+        function maskOn() {
+            $(".mask_gray").removeClass('mask_off')
+            $(".mask_gray").addClass('mask_on')
+        }
+        function maskOff() {
+            $(".mask_gray").removeClass('mask_on')
+            $(".mask_gray").addClass('mask_off')
+        }
+        function modal_none(x) {
+            x.removeClass("modal_block");
+            x.addClass("modal_none");
+        }
+        function modal_block(x) {
+            x.removeClass("modal_none");
+            x.addClass("modal_block");
+        }
+
+        // modal按鈕CSS
+        $('.form_btn button').on('click', function () {
+            if ($(this).hasClass("checked_btn") == true) {
+                $(this).removeClass("checked_btn")
+            } else {
+                $(this).addClass("checked_btn")
+            }
+        })
+
+
+
+
+        function refreshData() {
+
+            $.ajax({
+                url: `http://localhost:3000/select/member`,
+                type: "post",
+                data: { id }
+            }).done(function (x) {
+                var datafromS = JSON.parse(x);
+                $("#memberid").text("會員帳號 " + datafromS[0].member_ac).css("font-weight", "bold")
+                $("#money").text(datafromS[0].member_money)
+
+            })
+            $('#traderecord_data').empty()
+            $.ajax({
+                url: `http://localhost:3000/select/traderecord/${id}`,
+                type: "GET"
+            }).done(function (x) {
+                var traderecord = JSON.parse(x)
+                // console.log(traderecord)
+                for (i = 0; i < traderecord.length; i++) {
+                    var type
+                    switch (traderecord[i].tr_type) {
+                        case 0: type = '儲值'; break;
+                        case 1: type = '提領'; break;
+                        case 2: type = '繳費'; break;
+                    }
+                    $('#traderecord_data').append(`
+                        <div class="col-12 row traderecord_data" datadate="${traderecord[i].tr_date}" datatype="${traderecord[i].tr_type}">
+                            <div class="col-9" style="text-align: left;">
+                                <h4>${traderecord[i].tr_counterparty}</h4>
+                                <h5 style="color: #0069B4;">Carparking${type}</h5>
+                                <h6 style="color: gray">${traderecord[i].tr_date} ${traderecord[i].tr_time}</h6>
+                            </div>
+                            <div class="col-3" style="text-align: right;">
+                                <h3>${traderecord[i].tr_amount}元</h3>
+                            </div>                            
+                            <hr>
+                        </div>
+                    `)
+                }
+            })
+            return true
+        }
+
+        refreshData()
+        $('#dateChoose').on('click', function () {
+            // console.log($('input[name=date1]').val())
+            // console.log($('input[name=date2]').val())
+            // console.log($($('div[datadate]')[1]).attr('datadate'))
+            $(".Data_off").removeClass("Data_off")
+            for (i = 0; i < $('div[datadate]').length; i++) {
+                var cd = new Date($($('div[datadate]')[i]).attr('datadate'))
+                if (isDuringDate(cd)) {
+                }
+                else {
+                    $($('div[datadate]')[i]).addClass("Data_off")
+                }
+            }
+            closeModal()
+            maskOff()
+        })
+
+        $('#trTypeChoose').on('click', function () {
+            typeChoose()
+        })
+        function typeChoose() {
+            var datalist = [0, 1, 2]
+            $(".Data_off").removeClass("Data_off")
+            if ($($('button[datatypechoose]')[0]).hasClass('checked_btn')) {
+                datalist = datalist.filter(data => data != 0)
+            }
+            if ($($('button[datatypechoose]')[1]).hasClass('checked_btn')) {
+                datalist = datalist.filter(data => data != 1)
+            }
+            if ($($('button[datatypechoose]')[2]).hasClass('checked_btn')) {
+                datalist = datalist.filter(data => data != 2)
+            }
+            datalist.forEach((x) => {
+                for (i = 0; i < $('div[datatype]').length; i++) {
+                    if ($($('div[datatype]')[i]).attr('datatype') == x) {
+                        $($('div[datatype]')[i]).addClass("Data_off")
+
+                    }
+                }
+
+            })
+            closeModal()
+            maskOff()
+        }
+        function isDuringDate(cd) {
+            // var cd = new Date($($('div[datadate]')[1]).attr('datadate'))
+            var d1 = new Date($('input[name=date1]').val())
+            var d2 = new Date($('input[name=date2]').val())
+            console.log(cd)
+            if (cd >= d1 && cd <= d2) {
+                return true;
+            } else {
+                return false;
+            };
+
+        }
+
+        $(".G_F_H").on("click", function () {
+            window.location = "./Gold_flow_home.html"
+        })
+    </script>
+
+</body>
+
+</html>

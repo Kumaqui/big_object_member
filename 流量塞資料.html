@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="parkingList"></div>
+    <div id="map" style="width: 100%; height: 600px;"></div>
+    <script>
+
+        let api_url = "./traffic.json";
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', api_url, true);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                response = JSON.parse(this.response)
+                console.log(response[0])
+                // //OID_ Name  Type HotWater Toilet Longitude Latitude
+                for (i = 0; i < response.length; i++) {
+                    // "h0":`${response[i].frih0}`,"h1":`${response[i].frih1}`,"h2":`${response[i].frih2}`,
+                    var monday = {
+                        "h0": parseInt(response[i].monh0), "h1": parseInt(response[i].monh1), "h2": parseInt(response[i].monh2), "h3":parseInt(response[i].monh3), "h4":parseInt(response[i].monh4), "h5":parseInt(response[i].monh5),
+                        "h6": parseInt(response[i].monh6), "h7": parseInt(response[i].monh7), "h8": parseInt(response[i].monh8), "h9":parseInt(response[i].monh9), "h10":parseInt(response[i].monh10), "h11":parseInt(response[i].monh11), "h12":parseInt(response[i].monh12),
+                        "h13":parseInt(response[i].monh13), "h14":parseInt(response[i].monh14), "h15":parseInt(response[i].monh15), "h16":parseInt(response[i].monh16), "h17":parseInt(response[i].monh17), "h18":parseInt(response[i].monh18), "h19":parseInt(response[i].monh19),
+                        "h20":parseInt(response[i].monh20), "h21":parseInt(response[i].monh21), "h22":parseInt(response[i].monh22), "h23":parseInt(response[i].monh23)
+                    }
+                    var tuesday = {
+                        "h0":response[i].tueh0, "h1":response[i].tueh1, "h2":response[i].tueh2, "h3":response[i].tueh3, "h4":response[i].tueh4, "h5":response[i].tueh5,
+                        "h6":response[i].tueh6, "h7":response[i].tueh7, "h8":response[i].tueh8, "h9":response[i].tueh9, "h10":response[i].tueh10, "h11":response[i].tueh11, "h12":response[i].tueh12,
+                        "h13":response[i].tueh13, "h14":response[i].tueh14, "h15":response[i].tueh15, "h16":response[i].tueh16, "h17":response[i].tueh17, "h18":response[i].tueh18, "h19":response[i].tueh19,
+                        "h20":response[i].tueh20, "h21":response[i].tueh21, "h22":response[i].tueh22, "h23":response[i].tueh23
+                    }
+                    var wednesday = {
+                        "h0": `${response[i].wenh0}`, "h1": `${response[i].wenh1}`, "h2": `${response[i].wenh2}`, "h3": `${response[i].wenh3}`, "h4": `${response[i].wenh4}`, "h5": `${response[i].wenh5}`,
+                        "h6": `${response[i].wenh6}`, "h7": `${response[i].wenh7}`, "h8": `${response[i].wenh8}`, "h9": `${response[i].wenh9}`, "h10": `${response[i].wenh10}`, "h11": `${response[i].wenh11}`, "h12": `${response[i].wenh12}`,
+                        "h13": `${response[i].wenh13}`, "h14": `${response[i].wenh14}`, "h15": `${response[i].wenh15}`, "h16": `${response[i].wenh16}`, "h17": `${response[i].wenh17}`, "h18": `${response[i].wenh18}`, "h19": `${response[i].wenh19}`,
+                        "h20": `${response[i].wenh20}`, "h21": `${response[i].wenh21}`, "h22": `${response[i].wenh22}`, "h23": `${response[i].wenh23}`
+                    }
+                    var thursday = {
+                        "h0": `${response[i].thuh0}`, "h1": `${response[i].thuh1}`, "h2": `${response[i].thuh2}`, "h3": `${response[i].thuh3}`, "h4": `${response[i].thuh4}`, "h5": `${response[i].thuh5}`,
+                        "h6": `${response[i].thuh6}`, "h7": `${response[i].thuh7}`, "h8": `${response[i].thuh8}`, "h9": `${response[i].thuh9}`, "h10": `${response[i].thuh10}`, "h11": `${response[i].thuh11}`, "h12": `${response[i].thuh12}`,
+                        "h13": `${response[i].thuh13}`, "h14": `${response[i].thuh14}`, "h15": `${response[i].thuh15}`, "h16": `${response[i].thuh16}`, "h17": `${response[i].thuh17}`, "h18": `${response[i].thuh18}`, "h19": `${response[i].thuh19}`,
+                        "h20": `${response[i].thuh20}`, "h21": `${response[i].thuh21}`, "h22": `${response[i].thuh22}`, "h23": `${response[i].thuh23}`
+                    }
+                    var friday = {
+                        "h0": `${response[i].frih0}`, "h1": `${response[i].frih1}`, "h2": `${response[i].frih2}`, "h3": `${response[i].frih3}`, "h4": `${response[i].frih4}`, "h5": `${response[i].frih5}`,
+                        "h6": `${response[i].frih6}`, "h7": `${response[i].frih7}`, "h8": `${response[i].frih8}`, "h9": `${response[i].frih9}`, "h10": `${response[i].frih10}`, "h11": `${response[i].frih11}`, "h12": `${response[i].frih12}`,
+                        "h13": `${response[i].frih13}`, "h14": `${response[i].frih14}`, "h15": `${response[i].frih15}`, "h16": `${response[i].frih16}`, "h17": `${response[i].frih17}`, "h18": `${response[i].frih18}`, "h19": `${response[i].frih19}`,
+                        "h20": `${response[i].frih20}`, "h21": `${response[i].frih21}`, "h22": `${response[i].frih22}`, "h23": `${response[i].frih23}`
+                    }
+                    var saturday = {
+                        "h0": `${response[i].sath0}`, "h1": `${response[i].sath1}`, "h2": `${response[i].sath2}`, "h3": `${response[i].sath3}`, "h4": `${response[i].sath4}`, "h5": `${response[i].sath5}`,
+                        "h6": `${response[i].sath6}`, "h7": `${response[i].sath7}`, "h8": `${response[i].sath8}`, "h9": `${response[i].sath9}`, "h10": `${response[i].sath10}`, "h11": `${response[i].sath11}`, "h12": `${response[i].sath12}`,
+                        "h13": `${response[i].sath13}`, "h14": `${response[i].sath14}`, "h15": `${response[i].sath15}`, "h16": `${response[i].sath16}`, "h17": `${response[i].sath17}`, "h18": `${response[i].sath18}`, "h19": `${response[i].sath19}`,
+                        "h20": `${response[i].sath20}`, "h21": `${response[i].sath21}`, "h22": `${response[i].sath22}`, "h23": `${response[i].sath23}`
+                    }
+                    var sunday = {
+                        "h0": `${response[i].sunh0}`, "h1": `${response[i].sunh1}`, "h2": `${response[i].sunh2}`, "h3": `${response[i].sunh3}`, "h4": `${response[i].sunh4}`, "h5": `${response[i].sunh5}`,
+                        "h6": `${response[i].sunh6}`, "h7": `${response[i].sunh7}`, "h8": `${response[i].sunh8}`, "h9": `${response[i].sunh9}`, "h10": `${response[i].sunh10}`, "h11": `${response[i].sunh11}`, "h12": `${response[i].sunh12}`,
+                        "h13": `${response[i].sunh13}`, "h14": `${response[i].sunh14}`, "h15": `${response[i].sunh15}`, "h16": `${response[i].sunh16}`, "h17": `${response[i].sunh17}`, "h18": `${response[i].sunh18}`, "h19": `${response[i].sunh19}`,
+                        "h20": `${response[i].sunh20}`, "h21": `${response[i].sunh21}`, "h22": `${response[i].sunh22}`, "h23": `${response[i].sunh23}`
+                    }
+                    console.log(monday)
+                    $.ajax({
+                        url: "http://localhost:3000/insert/traffic",
+                        type: "POST",
+                        data: {
+                            id: response[i].Position,
+                            name: response[i].Position,
+                            monday:JSON.stringify(monday),
+                            tuesday:JSON.stringify(tuesday),
+                            wednesday:JSON.stringify(wednesday),
+                            thursday:JSON.stringify(thursday),
+                            friday:JSON.stringify(friday),
+                            saturday:JSON.stringify(saturday),
+                            sunday:JSON.stringify(sunday)
+                        }
+                    })
+                }
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>提領</title>
+    <link rel="stylesheet" href="./assets/css/BS5_CSS/bootstrap.css">
+    <script src="./assets/js/BS5_js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="./assets/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <style>
+        #bank {
+            width: 100%;
+            border: none;
+            height: 50px;
+            font-size: 30px;
+            /* overflow: hidden; */
+
+        }
+
+        #input {
+            border: none;
+            font-size: 30px;
+        }
+
+        #input:focus {
+            outline: none;
+
+        }
+
+        #input::-webkit-outer-spin-button,
+        #input::-webkit-inner-spin-button {
+            appearance: none;
+        }
+
+        .e05 {
+            visibility: hidden;
+
+        }
+
+        table tr td {
+            font-size: 24px;
+            color: rgb(150, 150, 150);
+            padding: 50px;
+            border-bottom: 1px rgba(200, 200, 200, 0.444) solid;
+            /* width: 1%; */
+        }
+
+        table {
+
+            width: 100%;
+            height: 300px;
+
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            font-size: 10px;
+        }
+
+        .color_gary {
+            color: rgb(150, 150, 150);
+        }
+
+        .border_gray {
+            border: 1px rgb(150, 150, 150) solid;
+        }
+
+        .dis_flex_column_center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dis_flex_row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .border_none {
+            border: none;
+            background-color: transparent;
+        }
+
+        .body_color {
+            background-size: cover;
+            background-color: rgba(206, 206, 206, 0.302)
+        }
+
+        .btn-gray {
+            width: 100%;
+            background-color: rgba(128, 128, 128, 0.241);
+            border-radius: 10px;
+            color: #0069B4;
+            border-color: white;
+            font-size: 20px;
+            padding: 5px;
+        }
+
+     
+        .btn_blue:hover {
+
+            background-color: rgb(0, 135, 231)
+        }
+
+
+
+        .btn_blue:active {
+            transform: translate(0, 5px);
+            box-shadow: 0px 1px 0px 0px rgb(0, 81, 139);
+        }
+
+        .btn_blue {
+            width: 100%;
+            border: none;
+            background-color: rgb(0, 106, 181);
+            border-radius: 10px;
+            color: white;
+            font-size: 20px;
+            padding: 5px;
+            text-shadow: -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144),
+                -2px 2px 2px rgb(1, 84, 144);
+            box-shadow: 0px 15px 0px 0px rgb(1, 84, 144);
+            transition: all .4s;
+        }
+            .btn_i {
+                color: white;
+                text-align: center;
+                font-size: 40px;
+                padding-left: 30px;
+            }
+
+            .bg_blue {
+                background-color: #0069B4;
+            }
+
+            .bg_white {
+                background-color: white;
+            }
+
+            .color_white {
+                color: white;
+            }
+
+            .color_blue {
+                color: #0069B4
+            }
+    </style>
+
+</head>
+
+<body class="body_color">
+    <!-- 導覽列 -->
+    <div style="height: 80px; " class="bg_blue">
+        <div class="dis_flex_center">
+            <h1 class="color_white" style="line-height:80px; ">
+                <b>輸入提領金額</b>
+            </h1>
+        </div>
+        <div style="margin-top: -83px;">
+            <button class="border_none btn_i color_white">
+                x
+            </button>
+        </div>
+    </div>
+
+
+
+    <div class="bg_white">
+        <div class="container" style="padding-top: 20px; padding-top: 50px;">
+            <!-- 轉帳帳戶 -->
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="color_gary">
+                        轉帳帳戶
+                    </h2>
+                </div>
+                <div class="col-12">
+                    <select id="bank" name="bank">
+                        <option value="">中華郵政帳戶[*123451]</option>
+                        <option value="">中國信託帳戶[*124555]</option>
+                        <option value="">玉山銀行帳戶[*435222]</option>
+                    </select>
+                </div>
+            </div>
+            <hr>
+            <!-- 輸入儲值金額 -->
+            <div class="mt-5">
+                <div style="display: inline-block;">
+                    <h2 class="color_gary">目前Car Parking 帳戶餘額</h2>
+                </div>
+                <div style="display: inline-block; float: right;">
+                    <h2 class="color_gary">$55</h2>
+                </div>
+                <hr style="margin-top: 1px;">
+
+
+            </div>
+            <!-- 儲值金額輸入框 -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h3 class="color_gary">請輸入提領金額</h3>
+                </div>
+                <div class="col-12" style="margin-top: -10px;">
+                    <div class="row ms-5">
+                        <div class="col-11">
+                            <input required placeholder="0" style="width: 100%; " id="input" type="number"
+                                ondrop="return false;" onpaste="return false;" />
+                        </div>
+                        <div class=" col-1 ">
+                            <button id="mydelete" style="margin-top: 15px;" class="e05 border_none">
+                                x
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="color_gary" style=" width: 20px; position: relative;top:-30px; ">
+                        <h3>TWD</h3>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr>
+    </div>
+
+    <br>
+    <div class="container">
+        <button id="a01" class="btn_blue" type="submit" value="Submit">
+            <b>下一步</b>
+        </button>
+    </div>
+
+
+
+    <script>
+        // console.log($)
+        var input = document.getElementById('input');
+        input.addEventListener('input', function (e) {
+            console.log(e.data);
+
+            if (e.data) {
+                $('#mydelete').removeClass('e05')
+            } else {
+                $('#mydelete').addClass('e05')
+            }
+        })
+        $('#mydelete').on('click', function () {
+            document.getElementById("input").value = "";
+        })
+
+
+    </script>
+
+</body>
+
+</html>

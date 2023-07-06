@@ -1,0 +1,556 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 390px;
+}
+
+.btn {
+    padding: 0px;
+    border-radius: 55px;
+}
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 60px;
+    background-color: white;
+    border-radius: 30px;
+    border: 2px solid rgb(128, 128, 128);
+    width: 380px;
+    position: fixed;
+    left: 6px;
+}
+
+.search-input {
+    width: 250px;
+    height: 40px;
+    padding: 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+}
+
+#map_mark {
+    font-size: 15px;
+    height: 40px;
+    padding: 10px 5px;
+    text-align: center;
+    margin-left: -5px;
+}
+
+#doSearch {
+    font-size: 15px;
+    height: 40px;
+    padding: 10px 5px;
+    text-align: center;
+    margin-left: 50px;
+}
+
+
+.sidebar {
+    position: fixed;
+    bottom: 0;
+    overflow-y: scroll;
+    width: 390px;
+    height: 70vh;
+    background-color: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+    z-index: 1;
+}
+
+.sidebar.collapsed {
+    transform: translateY(65vh);
+}
+
+
+#toggle-sidebar {
+    position: fixed;
+    top: 0px;
+    left: 47%;
+    width: 35px;
+    height: 22px;
+    align-items: center;
+    /* transform: translateX(-50%); */
+    /* background-color: #007bff; */
+    background-color: #fff;
+    border: none;
+    border-radius: 10%;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    z-index: 1;
+}
+
+/* 控制面板按鈕的方向轉換 */
+#toggle-sidebar.collapsed i {
+    transform: rotate(180deg);
+}
+
+#toggle-sidebar:hover {
+    background-color: rgba(128, 128, 128, 0.07);
+}
+
+/* 控制整體卷軸樣式 */
+::-webkit-scrollbar {
+    width: 12px;
+    /* 卷軸寬度 */
+}
+
+/* 控制卷軸滑塊樣式 */
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    /* 滑塊顏色 */
+    border-radius: 6px;
+    /* 滑塊圓角 */
+    border: 3px solid #fff;
+    /* 滑塊邊框 */
+}
+
+/* 控制卷軸滑塊樣式（滑鼠懸停） */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}
+
+/* 清單 */
+.navlist {
+    display: inline-block;
+    padding: 0.5em 1em;
+    background-color: #fff;
+    color: #0069B4;
+    border-radius: 0px;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 600;
+    font-family: 'Nunito';
+    font-style: normal;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    /* text-decoration: none; */
+}
+
+.marker-white {
+    color: white;
+    font-size: 1.5em;
+    background-color: white;
+
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.search-container {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+select {
+    left: calc(50% - 56px/2 + 47px);
+    top: calc(50% - 15px/2);
+    background: #FFFFFF;
+    /* gray- */
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 200px;
+    font-size: 8px;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 11px;
+}
+
+
+/* 將下拉選單的選項文字置中 */
+#filter {
+    text-align: center;
+    position: relative;
+    top: 60px;
+    left: 10px;
+}
+
+
+
+/* 對話框樣式 */
+dialog {
+    width: 380px;
+    padding: 0;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: none;
+    position: fixed;
+    top: 50%;
+    left: 49%;
+    transform: translate(-50%, -50%);
+}
+
+#Dialog_info {
+    position: fixed;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: none;
+    border: none;
+    z-index: 999;
+    max-width: 500px;
+    left: 195px;
+    top: 420px;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0069B4;
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+.dialog-title {
+    margin: 8px 0px 8px 15px;
+    color: white;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.close-icon {
+    color: white;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 8px;
+}
+
+.dialog_info_content {
+    padding: 10px;
+    font-size: 1.2em;
+    /* position:absolute; */
+    /* top: 20px; */
+    /* top: -20%; */
+    right: 52%;
+
+}
+
+.dialog_info_content img {
+    width: 100%;
+    height: 380px;
+}
+
+#Dialog_map {
+    position: fixed;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: none;
+    border: none;
+    z-index: 999;
+    max-width: 500px;
+    left: 194px;
+    top: 20px;
+}
+
+.dialog_map_content {
+    padding: 20px;
+    font-size: 1.2em;
+    /* display: block; */
+    /* position:absolute; */
+    /* top: 20px; */
+    top: 50%;
+    right: 50%;
+}
+
+.dialog_map_content img {
+    display: inline-block;
+    /* 設置為 block 元素 */
+    margin: auto 50px;
+    margin-right: 1%;
+    object-fit: cover;
+    width: 100px;
+}
+
+
+.map_select:active {
+    border: 2px solid rgba(0, 0, 0, 0.684);
+}
+
+#Dialog_road_fee {
+    position: fixed;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: none;
+    border: none;
+    z-index: 999;
+    max-width: 500px;
+    left: 194px;
+    top: -200px;
+}
+
+#Dialog_fee {
+    position: fixed;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: none;
+    border: none;
+    z-index: 999;
+    max-width: 500px;
+    left: 194px;
+    top: -80px;
+}
+
+.parking_name {
+    display: flex;
+    align-items: center;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.parking_subname {
+    display: flex;
+    align-items: center;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.stay_name {
+    display: flex;
+    align-items: center;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+}
+
+
+.special-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+    margin-right: 9px;
+
+}
+
+.service-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+    margin-right: 9px;
+
+}
+
+#location_addr p {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 15px;
+    /* identical to box height */
+
+    /* gray */
+    color: #ACACAC;
+}
+
+#load_addr p {
+    /* small */
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 11px;
+    /* identical to box height */
+    color: #000000;
+}
+
+#update_info p {
+    /* small */
+
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 11px;
+    /* identical to box height */
+
+    /* gray */
+    color: #ACACAC;
+}
+
+#toilets p {
+    /* small */
+
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 11px;
+    /* identical to box height */
+
+    /* gray */
+    color: #ACACAC;
+}
+
+#hotw p {
+    /* small */
+
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 11px;
+    /* identical to box height */
+
+    /* gray */
+    color: #ACACAC;
+}
+
+/* 按鈕群組樣式 */
+
+#view_fee {
+    width: 23%;
+    margin-left: -10px;
+}
+
+#like {
+    width: 23%;
+}
+
+#stay_like {
+    display: block;
+    position: relative;
+    width: 23%;
+    left: -8px;
+}
+
+#go {
+    /* margin-left:-20px;
+margin-right: -13px; */
+    margin-left: -10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 105%;
+}
+
+#number {
+    /* small */
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 11px;
+}
+
+.leafover_num {
+    color: #34A853;
+}
+
+#distance_select {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-size: 10pt;
+    padding: 3px 5px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.934);
+}
+
+#special_select {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-size: 10pt;
+    padding: 3px 5px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.934);
+}
+
+#type_select {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-size: 10pt;
+    padding: 3px 5px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.934);
+
+}
+
+#car_stay_type {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-size: 10pt;
+    padding: 3px 5px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.934);
+
+}
+
+#service {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-size: 10pt;
+    padding: 3px 5px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.934);
+
+}
+
+option {
+    font-weight: bold;
+    font-size: 10pt;
+    color: rgba(0, 0, 0, 0.934);
+}
+
+.distance {
+    /* small */
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 11px;
+    /* identical to box height */
+    /* gray */
+    color: #ACACAC;
+    margin-bottom: 9px;
+}
+
+.distance_time {
+    /* small */
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 0px;
+    /* identical to box height */
+    /* gray */
+
+    color: #ACACAC;
+}
+
+#popular_time_graph {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 11px;
+    /* identical to box height */
+    /* gray */
+
+    color: #ACACAC;
+}

@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car stay map</title>
+    <!-- leaflet -->
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/map_css/map.css">
+    <script src="./assets/js/BS5_js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="./assets/js/jquery-3.6.4.min.js"></script>
+    <!-- routing machine -->
+    <script src="./assets/js/map_control_js/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/map_control_css/leaflet-sidebar.css" />
+    <!-- geasearch -->
+    <link rel="stylesheet" href="./assets/css/map_control_css/geosearch.css">
+    <script src="./assets/js/map_control_js/geosearch.umd.js"></script>
+    <meta charset="UTF-8">
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        #topBar {
+            z-index: 20;
+            position: absolute;
+            top: 0;
+        }
+
+        #searchBar {
+            z-index: 15;
+            position: absolute;
+            top: 0;
+        }
+
+        #searchInfo {
+            z-index: 15;
+            position: absolute;
+            bottom: 0;
+        }
+
+        #userPlaceBtn {
+            position: absolute;
+            right: 10px;
+            top: 140px;
+            z-index: 16;
+            padding: 5px 5px 4px;
+            border-radius: 50%;
+            border: 0px;
+            background-color: white;
+            box-shadow: 0 0 5px gray;
+        }
+
+        #userPlaceBtn img {
+            width: 30px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- 導覽列 -->
+    <div id="topBar">
+        <div
+            style="background-color: #0069B4; display: flex; justify-content: space-between; align-items: center; padding: 10px;width: 390px;">
+            <div class="list" style="display: flex; align-items: center;">
+                <span class="list-icon" onclick="toggleListMenu()"><i class="fas fa-bars"
+                        style="color: white;cursor: pointer;"></i></span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <!-- <span class="fa-stack fa-xl" style="margin-right: 15px;z-index: 99;" onclick="showDialog_info()">
+                    <i class="far fa-circle fa-stack-1x" style="color: white;font-size: 1.5em;cursor: pointer;"></i>
+                    <i class="fas fa-info fa-stack-1x fa-inverse" style="color: white;cursor: pointer;"></i>
+                </span> -->
+                <span class="fa-stack fa-xl" style="z-index: 99;">
+                    <i id="redo" class="fas fa-redo fa-rotate-60" style="color: white;cursor: pointer;"
+                        onclick="window.location.reload()"></i>
+                </span>
+                <span class="fa-stack fa-xl" style="z-index: 99;">
+                    <i class="fas fa-layer-group" style="color: white;cursor: pointer;" onclick="showDialog_map()"></i>
+                </span>
+            </div>
+        </div>
+        <!-- 下拉選單 -->
+        <ul class="list-menu" style="display: none;z-index: 99;background-color: white;cursor: pointer;width: 100%;">
+<!-- 
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">繳費紀錄</button>
+            </div>
+
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">付費車牌</button>
+            </div>
+
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">個人資訊</button>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">付款方式</button>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">通知中心</button>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <button class="btn btn-primary border-0 w-100 navlist" type="button">登出</button>
+            </div> -->
+        </ul>
+    </div>
+    <!-- 覆蓋式視窗 -->
+    <!-- 地圖選擇 -->
+    <dialog id="Dialog_map">
+        <div class="dialog-header">
+            <h6 class="dialog-title">地圖選擇</h6>
+            <i class="fas fa-times fa-xs close-icon" onclick="closeDialog_map()"></i>
+        </div>
+        <div class="dialog_map_content">
+            <img id="car_parking_img" class="map_select" src="./assets/image/map_image/car_parking.jpg" alt=""
+                style="cursor: pointer;" onclick="window.location.href = './mobile_v13.html';">
+            <img id="car_stay_img" class="map_select" src="./assets/image/map_image/car_stay_select.jpg" alt=""
+                style="cursor: pointer;" onclick="">
+        </div>
+    </dialog>
+
+    <div id="searchBar">
+        <!-- <div class="search-box">
+            <i id="map_mark" class="fas fa-map-marker-alt "
+                style="font-size: 1.1em;; color: rgba(128, 128, 128, 0.66);"></i>
+            <input type="text" class="search-input border-0" placeholder="想去哪裡?">
+            <i id="doSearch" class="btn fas border-0 fa-search"
+                style="font-size: 1.1em; color: rgba(128, 128, 128, 0.66);"></i>
+        </div> -->
+        <div>
+            <div id="filter">
+                <label for="car_stay_type"></label>
+                <select id="car_stay_type">
+                    <option value="non_type">類型(不限)</option>
+                    <option value="mooring_point">泊點</option>
+                    <option value="stockroom">棧點</option>
+                    <option value="camping">宿店-露營區</option>
+                </select>
+                <label for="service"></label>
+                <select id="service">
+                    <option value="non_parking_type">服務需求(不限)</option>
+                    <option value="toilet">廁所</option>
+                    <option value="hot_water">熱水</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- track user place btn-->
+    <button id="userPlaceBtn"><img src="./assets/image/map_control_img/user_place.png" alt=""> </button>
+
+    <!-- 手風琴(開關式選單) -->
+    <div class="sidebar" id="searchInfo">
+        <button id="toggle-sidebar">
+            <i class="fas fa-caret-down" style="color: #0069B4;"></i>
+        </button>
+
+        <br>
+        <!-- 車宿選單 -->
+        <div id="parking_stay" class="accordion" id="accordion_map_list">
+            <div class="accordion-item" v-for="(stay_name, index) in datafromS" :key="index">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" v-on:click="toggleCollapse(stay_name.sl_id)"
+                        :class="{'collapsed': activeCollapse !== stay_name.sl_id }"
+                        :aria-expanded="activeCollapse === stay_name.sl_id"
+                        :aria-controls="'collapse-' + stay_name.sl_id">
+                        <div style="display: flex; flex-direction: column;">
+                            <p class="stay_position">{{stay_name.cs_name}}</p>
+                        </div>
+                        <div class="service-group">
+                            <img v-if="stay_name.cs_toilet === '1'" id="toilet"
+                                src="./assets/image/map_image/toilet.png" style="margin: 2px;width: 35px;" alt="">
+                            <img v-if="stay_name.cs_water === '1'" id="hot_water"
+                                src="./assets/image/map_image/hotWater.png" style="margin: 2px;width: 35px" alt="">
+                        </div>
+                    </button>
+                </h2>
+                <div :id="'collapse-' + stay_name.sl_id" class="accordion-collapse collapse"
+                    :class="{'show': activeCollapse === stay_name.sl_id }"
+                    :aria-labelledby="'heading-' + stay_name.sl_id" data-bs-parent="#accordion_map_list">
+                    <div class="accordion-body">
+                        <div id="list_detail">
+                            <div id="number" style="display: flex; flex-direction: row;">
+                                <p class="type_ti">類型：</p>
+                                <p class="type_de">{{stay_name.cs_type}}</p>
+                            </div>
+                            <div class="row">
+                                <div id="toilets" class="col-6" style="display: flex; flex-direction: row;">
+                                    <p class="toilet_ti">廁所提供：</p>
+                                    <p class="toilet_de">{{ stay_name.toilet === 1 ? '有' : '無' }}</p>
+                                </div>
+                                <div id="hotw" class="col-6" style="display: flex; flex-direction: row;">
+                                    <p class="hotw_ti">熱水提供：</p>
+                                    <p class="hotw_de">{{stay_name.cs_water === 1 ? '有' : '無' }}</p>
+                                </div>
+                            </div>
+                            <div id="stayX" style="display:none;">{{ stay_name.cs_lng}}</div>
+                            <div id="stayY" style="display:none;">{{ stay_name.cs_lat}}</div>
+
+                            <div id="btn_group">
+                                <!-- <img id="like" class="btn" src="./assets/image/map_image/like_btn.svg" alt=""> -->
+                                <img id="go" class="btn" src="./assets/image/map_image/go_btn.svg"
+                                    @click="routing([stay_name.cs_lat, stay_name.cs_lng])" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br><br><br><br><br><br><br><br><br>
+        <!-- Add more accordion items here -->
+
+    </div>
+
+
+
+    <script>
+        //地圖顯示相關設定
+        let zoom = 15; // 0 - 18
+        let center = [24.137508915419836, 120.68694731120945]; // 中心點座標
+        let map = L.map('map').setView(center, zoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap', // 商用時必須要有版權出處
+            maxZoom: 18,
+            layerLimit: 20, // 設定顯示圖層數量上限為 20
+            zoomControl: true, // 是否秀出 - + 按鈕
+        }).addTo(map);
+        // remove zoomControl
+        map.zoomControl.remove();
+
+        // 設定icon
+        // 泊點icon
+        var sleep = L.icon({ //add this new icon
+            iconUrl: './assets/image/map_control_img/sleep.png',
+            iconSize: [40, 40], // size of the icon
+        });
+        // 棧點icon
+        var rest = L.icon({
+            iconUrl: './assets/image/map_control_img/bus.png',
+            iconSize: [40, 40],
+        });
+        // 露營區icon
+        var camping = L.icon({
+            iconUrl: './assets/image/map_control_img/camping.png',
+            iconSize: [40, 40],
+        });
+        // user icon
+        var userIcon = L.icon({
+            iconUrl: './assets/image/map_control_img/user_place.png',
+            iconSize: [40, 40],
+        });
+        // search icon
+        var searchIcon = L.icon({
+            iconUrl: './assets/image/map_control_img/Target.png',
+            iconSize: [35, 40],
+        });
+
+
+        // 標籤匯入class
+        let parkingClass = (markClass, className) => {
+            let mark = markClass.closePopup();
+            mark._icon.classList.add(className);
+        }
+
+        // 標籤屬性匯入提示窗
+        function inputInfo(parkDct, marker) {
+            marker.bindPopup(`
+                <b>${parkDct['cs_name']}</b><br>
+                類型：${parkDct['cs_type']}
+                ${parkDct['cs_water'] == 1 ? '<img src="./assets/image/map_image/hotWater.png" style="margin: 2px;width: 35px" alt="">' : ''}
+                ${parkDct['cs_toilet'] == 1 ? '<img src="./assets/image/map_image/toilet.png" style="margin: 2px;width: 35px" alt="">' : ''}<br>
+                <button onclick="routing(${parkDct['cs_lat']}, ${parkDct['cs_lng']})">開始導航</button>
+            `)
+        }
+
+        // 導航
+        function routing(y, x) {
+            // 導向google導航網頁
+            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + y + ',' + x;
+            window.open(url);
+        }
+
+
+        // 取得使用者點位
+        navigator.geolocation.watchPosition(success, error);
+
+        // geosearch(搜尋bar) 
+        const search = new GeoSearch.GeoSearchControl({
+            provider: new GeoSearch.OpenStreetMapProvider(),
+            style: 'bar',
+            showMarker: false,
+            // marker: searchPlace,
+        });
+        map.addControl(search);
+        function fetchData() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "http://localhost:3000/select/carstay/",
+                    type: "GET"
+                }).done(function (x) {
+                    const datafromS = JSON.parse(x);
+                    resolve(datafromS);
+                    $(datafromS).each(function (index, carStayData) {
+                        switch (carStayData['cs_type']) {
+                            case '棧點':
+                                if (carStayData['cs_toilet'] == '1') {
+                                    var restToilet = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: rest }).addTo(map);
+                                    inputInfo(carStayData, restToilet);
+                                    parkingClass(restToilet, 'restToilet');
+                                } else if (carStayData['cs_water'] == '1') {
+                                    var restWater = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: rest }).addTo(map);
+                                    inputInfo(carStayData, restWater);
+                                    parkingClass(restWater, 'restWater');
+                                } else {
+                                    var restNon = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: rest }).addTo(map);
+                                    inputInfo(carStayData, restNon);
+                                    parkingClass(restNon, 'restNon');
+                                }
+                                break;
+
+                            case '泊點':
+                                if (carStayData['cs_toilet'] == '1') {
+                                    var sleepToilet = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: sleep }).addTo(map);
+                                    inputInfo(carStayData, sleepToilet);
+                                    parkingClass(sleepToilet, 'sleepToilet');
+                                } else if (carStayData['cs_water'] == '1') {
+                                    var sleepWater = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: sleep }).addTo(map);
+                                    inputInfo(carStayData, sleepWater);
+                                    parkingClass(sleepWater, 'sleepWater');
+                                } else {
+                                    var sleepNon = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: sleep }).addTo(map);
+                                    inputInfo(carStayData, sleepNon);
+                                    parkingClass(sleepNon, 'sleepNon');
+                                }
+                                break;
+                            default:
+                                if (carStayData['cs_toilet'] == '1') {
+                                    var campingToilet = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: camping }).addTo(map);
+                                    inputInfo(carStayData, campingToilet);
+                                    parkingClass(campingToilet, 'campingToilet');
+                                } else if (carStayData['cs_water'] == '1') {
+                                    var campingWater = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: camping }).addTo(map);
+                                    inputInfo(carStayData, campingWater);
+                                    parkingClass(campingWater, 'campingWater');
+                                } else {
+                                    var campingNon = L.marker([carStayData['cs_lat'], carStayData['cs_lng']], { icon: camping }).addTo(map);
+                                    inputInfo(carStayData, campingNon);
+                                    parkingClass(campingNon, 'campingNon');
+                                }
+                                break;
+                        }
+                    })
+                })
+            })
+        }
+
+
+        let usermarker, userZoomed, userlat, userlng, searchlat, searchlng, searchmarker;
+        map.on('geosearch/showlocation', function (e) {
+            searchlat = e.location.y;
+            searchlng = e.location.x;
+            // reset marker and circle
+            if (searchmarker) {
+                map.removeLayer(searchmarker);
+                // map.removeLayer(userCircle);
+            }
+            // add search marker
+            searchmarker = L.marker([e.location.y, e.location.x], { icon: searchIcon }).addTo(map);
+
+        });
+        // 提示未啟用導航
+        function error(err) {
+            if (err.code === 1) {
+                alert("無法獲得位置資訊，請開啟定位功能或使用搜尋欄搜尋您所在地點");
+            } else {
+                alert('已啟用定位功能')
+            }
+        }
+
+        function success(pos, area = $('#distance_select').val(), parkType = $('#type_select').val()) {
+            userlat = pos.coords.latitude;
+            userlng = pos.coords.longitude;
+            // reset marker and circle
+            if (usermarker) {
+                map.removeLayer(usermarker);
+            }
+            // add user marker
+            usermarker = L.marker([userlat, userlng], { icon: userIcon }).addTo(map);
+
+            // userplace callback
+            addUserPlace(area, parkType, userlat, userlng);
+
+        }
+
+        // userplace function
+        addUserPlace = (area, parkType, userlat, userlng) => {
+
+            $('#userPlaceBtn').on('click', function () {
+                map.setView([userlat, userlng], 15);
+            })
+
+        }
+
+        // change car_stay_type
+        $('#car_stay_type').change(function () {
+            switch ($(this).val()) {
+                case "mooring_point":
+                    $(".sleepToilet").show();
+                    $(".sleepWater").show();
+                    $(".sleepNon").show();
+                    $('.restToilet').hide();
+                    $('.restWater').hide();
+                    $('.restNon').hide();
+                    $('.campingToilet').hide();
+                    $('.campingWater').hide();
+                    $('.campingNon').hide();
+                    switch ($('#service').val()) {
+                        case "toilet":
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "hot_water":
+                            $(".sleepToilet").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "stockroom":
+                    $(".sleepToilet").hide();
+                    $(".sleepWater").hide();
+                    $(".sleepNon").hide();
+                    $('.restToilet').show();
+                    $('.restWater').show();
+                    $('.restNon').show();
+                    $('.campingToilet').hide();
+                    $('.campingWater').hide();
+                    $('.campingNon').hide();
+                    switch ($('#service').val()) {
+                        case "toilet":
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            break;
+                        case "hot_water":
+                            $('.restToilet').hide();
+                            $('.restNon').hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "camping":
+                    $(".sleepToilet").hide();
+                    $(".sleepWater").hide();
+                    $(".sleepNon").hide();
+                    $('.restToilet').hide();
+                    $('.restWater').hide();
+                    $('.restNon').hide();
+                    $('.campingToilet').show();
+                    $('.campingWater').show();
+                    $('.campingNon').show();
+                    switch ($('#service').val()) {
+                        case "toilet":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "hot_water":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingNon').hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    $(".sleepToilet").show();
+                    $(".sleepWater").show();
+                    $(".sleepNon").show();
+                    $('.restToilet').show();
+                    $('.restWater').show();
+                    $('.restNon').show();
+                    $('.campingToilet').show();
+                    $('.campingWater').show();
+                    $('.campingNon').show();
+                    switch ($('#service').val()) {
+                        case "toilet":
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "hot_water":
+                            $(".sleepToilet").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingNon').hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+            }
+        })
+
+        // change service type
+        $('#service').change(function () {
+            switch ($(this).val()) {
+                case "toilet":
+                    $(".sleepToilet").show();
+                    $(".sleepWater").hide();
+                    $(".sleepNon").hide();
+                    $('.restToilet').show();
+                    $('.restWater').hide();
+                    $('.restNon').hide();
+                    $('.campingToilet').show();
+                    $('.campingWater').hide();
+                    $('.campingNon').hide();
+                    switch ($('#car_stay_type').val()) {
+                        case "mooring_point":
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "stockroom":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').show();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "camping":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "hot_water":
+                    $(".sleepToilet").hide();
+                    $(".sleepWater").show();
+                    $(".sleepNon").hide();
+                    $('.restToilet').hide();
+                    $('.restWater').show();
+                    $('.restNon').hide();
+                    $('.campingToilet').hide();
+                    $('.campingWater').show();
+                    $('.campingNon').hide();
+                    switch ($('#car_stay_type').val()) {
+                        case "mooring_point":
+                            $(".sleepToilet").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "stockroom":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').show();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "camping":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingNon').hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+
+                default:
+                    $(".sleepToilet").show();
+                    $(".sleepWater").show();
+                    $(".sleepNon").show();
+                    $('.restToilet').show();
+                    $('.restWater').show();
+                    $('.restNon').show();
+                    $('.campingToilet').show();
+                    $('.campingWater').show();
+                    $('.campingNon').show();
+                    switch ($('#car_stay_type').val()) {
+                        case "mooring_point":
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "stockroom":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.campingToilet').hide();
+                            $('.campingWater').hide();
+                            $('.campingNon').hide();
+                            break;
+                        case "camping":
+                            $(".sleepToilet").hide();
+                            $(".sleepWater").hide();
+                            $(".sleepNon").hide();
+                            $('.restToilet').hide();
+                            $('.restWater').hide();
+                            $('.restNon').hide();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+            }
+        })
+
+    </script>
+
+    <script>
+        const $sidebar = $(".sidebar");
+        const $toggleSidebarButton = $("#toggle-sidebar");
+        let isSidebarOpen = true;
+        let isListMenuOpen = false;
+
+        $toggleSidebarButton.click(() => {
+            if (!isListMenuOpen) {
+                $sidebar.toggleClass("collapsed");
+                $toggleSidebarButton.toggleClass("collapsed");
+                isSidebarOpen = !isSidebarOpen;
+
+                $("body").css("overflow", isSidebarOpen ? "overflow" : "hidden");
+                $sidebar.css("overflow", isSidebarOpen ? "scroll" : "auto");
+
+                if (isSidebarOpen) {
+                    $sidebar.css("transition", "none");
+                    setTimeout(() => $sidebar.css("transition", "overflow 1.0s ease-in-out"), 0);
+                } else {
+                    $sidebar.css("transition", "");
+                }
+            }
+        });
+
+        function toggleListMenu() {
+            var listMenu = document.querySelector(".list-menu");
+            if (listMenu.style.display === "none") {
+                listMenu.style.display = "grid";
+                isListMenuOpen = true;
+            } else {
+                listMenu.style.display = "none";
+                isListMenuOpen = false;
+            }
+            $("body").css("overflow", isListMenuOpen ? "hidden" : "auto");
+        }
+
+        // 取得所有accordion的元素
+        const accordions = document.querySelectorAll('.accordion-button');
+
+        // 為每個accordion設置點擊事件監聽器
+        accordions.forEach(accordion => {
+            accordion.addEventListener('click', () => {
+                // 檢查sidebar是否已收合
+                const sidebar = document.querySelector('.sidebar');
+                const toggleSidebarButton = document.querySelector('#toggle-sidebar');
+                if (sidebar.classList.contains('collapsed')) {
+                    // 展開sidebar
+                    sidebar.classList.remove('collapsed');
+                    toggleSidebarButton.classList.remove('collapsed');
+                }
+            });
+        });
+
+
+        //當userPlaceBtn點擊時收合操作面板
+        const userPlaceBtn = document.getElementById('userPlaceBtn');
+        userPlaceBtn.addEventListener('click', () => {
+
+            // 檢查sidebar是否已收合
+            const sidebar = document.querySelector('.sidebar');
+            const toggleSidebarButton = document.querySelector('#toggle-sidebar');
+            if (!sidebar.classList.contains('collapsed')) {
+                // 展開sidebar
+                sidebar.classList.add('collapsed');
+                toggleSidebarButton.classList.add('collapsed');
+            }
+        })
+
+
+
+
+
+        // 控制對話框
+        // function showDialog_info() {
+        //     document.getElementById("Dialog_info").showModal();
+        // }
+
+        // function closeDialog_info() {
+        //     document.getElementById("Dialog_info").close();
+        // }
+
+        function showDialog_map() {
+            document.getElementById("Dialog_map").showModal();
+        }
+        function closeDialog_map() {
+            document.getElementById("Dialog_map").close();
+        }
+
+
+
+        //圖層切換icon
+        // 取得圖像元素
+        const carParkingImg = document.getElementById("car_parking_img");
+        const carStayImg = document.getElementById("car_stay_img");
+
+        // 為每個圖像添加點擊事件監聽器
+        carParkingImg.addEventListener("click", toggleCarParkingImg);
+        carStayImg.addEventListener("click", toggleCarStayImg);
+
+        function toggleCarParkingImg() {
+            // 切換選擇和未選擇圖像
+            if (!carParkingImg.src.includes("_select")) {
+                carParkingImg.src = "./assets/image/map_image/car_parking_select.jpg"
+            }
+            carStayImg.src = "./assets/image/map_image/car_stay.jpg";
+        }
+
+        function toggleCarStayImg() {
+            // 切換選擇和未選擇圖像
+            if (!carStayImg.src.includes("_select")) {
+                carStayImg.src = "./assets/image/map_image/car_stay_select.jpg"
+            }
+            carParkingImg.src = "./assets/image/map_image/car_parking.jpg";
+        }
+
+        // 手動更新清單的提示訊息
+        const redo = document.getElementById('redo');
+
+        redo.addEventListener('click', () => {
+            // 顯示訊息
+            const message = document.createElement('div');
+            message.innerText = '更新頁面';
+            message.style.position = 'fixed';
+            message.style.top = '50%';
+            message.style.left = '50%';
+            message.style.transform = 'translate(-50%, -50%)';
+            message.style.padding = '10px 20px';
+            message.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            message.style.color = '#fff';
+            message.style.borderRadius = '5px';
+            message.style.zIndex = 9999;
+            document.body.appendChild(message);
+
+            // 關閉訊息
+            setTimeout(() => {
+                message.remove();
+            }, 700);
+        });
+
+    </script>
+
+    <script>
+
+        fetchData()
+            .then((datafromS) => {
+                var carstayVue = new Vue({
+                    el: '#parking_stay',
+                    data: {
+                        datafromS,
+                        activeCollapse: null
+                    },
+                    methods: {
+                        toggleCollapse: function (sl_id) {
+                            // 如果點擊的是已經展開的選項，則關閉它
+                            if (this.activeCollapse === sl_id) {
+                                this.activeCollapse = null;
+                            }
+                            // 如果點擊的是折疊的選項，則展開它
+                            else {
+                                this.activeCollapse = sl_id;
+                            }
+                        },
+                        // 導航功能
+                        routing(routeLatLng) {
+                            // 導向google導航網頁
+                            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + routeLatLng[0] + ',' + routeLatLng[1];
+                            window.open(url);
+                        }
+                    }
+                })
+                console.log(datafromS);
+                // 停車場篩選用程式碼
+                var stay_type_select = document.getElementById("car_stay_type");
+                var service_select = document.getElementById("service");
+
+
+                stay_type_select.addEventListener("change", filterStayItems);
+                service_select.addEventListener("change", filterStayItems);
+
+                function filterStayItems() {
+                    var stayItems = document.querySelectorAll("#parking_stay .accordion-item");
+                    var typeValue = stay_type_select.value;
+                    var serviceValue = service_select.value;
+
+                    stayItems.forEach(item => {
+                        var stayName = item.querySelector(".stay_position");
+                        if ((typeValue === "non_type"
+                            || typeValue === "mooring_point" && item.querySelector(".type_de").textContent == '泊點'
+                            || typeValue === "stockroom" && item.querySelector(".type_de").textContent == '棧點'
+                            || typeValue === "camping" && item.querySelector(".type_de").textContent.includes('露營區')
+                        )
+                            && (serviceValue === "non_parking_type"
+                                || serviceValue === "toilet" && item.querySelector("#toilet") !== null
+                                || serviceValue === "hot_water" && item.querySelector("#hot_water") !== null
+                            )
+                        ) {
+                            item.style.display = "block";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
+
+
+
+                }
+            })
+
+    </script>
+    <script>
+        // 假設 memberID 存在於 localStorage 中
+        var memberID = localStorage.getItem('memberID');
+        var memberAc = localStorage.getItem('member_ac');
+
+        var loginHtml = `
+        <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Trade_record.html">交易紀錄</a>
+            </div>
+
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Car_Licence_add.html">新增車牌</a>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Gold_flow_home.html">會員中心</a>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./Payment.html">立即繳費</a>
+            </div>
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="./NotificationCenter.html">通知中心</a>
+            </div>
+            <div id="logIO" class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist clearLocalStroage" type="button" href="login.html">登出</a>
+            </div>
+        `;
+
+
+    
+
+        var SignOutHtml = `   
+        <div class="d-grid  w-100" style="z-index: 99;">
+            
+            <div class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="register.html">註冊</a>
+            </div>
+            <div id="logIO" class="d-grid  w-100" style="z-index: 99;">
+                <a class="btn btn-primary border-0 w-100 navlist" type="button" href="login.html">登入</a>
+            </div>
+        `
+        if (memberID) {
+            // 若 memberID 存在，表示已登入，顯示登出標籤，隱藏登入標籤
+            $('.list-menu').html(loginHtml);
+        } else {
+            // 若 memberID 不存在，表示未登入，顯示登入標籤，隱藏登出標籤
+            $('.list-menu').html(SignOutHtml);
+        }
+
+        $('.clearLocalStroage').on('click', function () {
+            localStorage.removeItem('memberID');
+        });
+
+       
+    </script>
+</body>
+
+</html>
